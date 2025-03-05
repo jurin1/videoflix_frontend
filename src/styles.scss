@@ -1,1 +1,105 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif; /* Standard Schriftfamilie */
+  color: var(--text-color); /* Standard Textfarbe aus Farbpalette */
+}
+
+/* Farbpalette */
+:root {
+  --primary-color: #007bff; /* Beispiel: Blau für primäre Elemente */
+  --secondary-color: #6c757d; /* Beispiel: Grau für sekundäre Elemente */
+  --accent-color: #ffc107; /* Beispiel: Gelb für Akzente */
+  --background-color: #f8f9fa; /* Beispiel: Heller Hintergrund */
+  --dark-background-color: #343a40; /* Beispiel: Dunkler Hintergrund */
+  --text-color: #333; /* Standard Textfarbe */
+  --light-text-color: #f8f9fa; /* Helle Textfarbe für dunkle Hintergründe */
+  --error-color: #dc3545; /* Beispiel: Rot für Fehler */
+  --success-color: #28a745; /* Beispiel: Grün für Erfolg */
+}
+
+/* Hintergrundfarben */
+.bg-primary { background-color: var(--primary-color); }
+.bg-secondary { background-color: var(--secondary-color); }
+.bg-accent { background-color: var(--accent-color); }
+.bg-background { background-color: var(--background-color); }
+.bg-dark { background-color: var(--dark-background-color); }
+
+/* Textfarben */
+.text-primary { color: var(--primary-color); }
+.text-secondary { color: var(--secondary-color); }
+.text-accent { color: var(--accent-color); }
+.text-text { color: var(--text-color); }
+.text-light { color: var(--light-text-color); }
+.text-error { color: var(--error-color); }
+.text-success { color: var(--success-color); }
+
+
+/* Schriftgrößen für Überschriften */
+h1 {
+  font-size: 2.5rem; /* Beispielgröße, anpassen nach Bedarf */
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+  margin-bottom: 0.6rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+  margin-bottom: 0.2rem;
+}
+
+h6 {
+  font-size: 1rem;
+  margin-bottom: 0rem;
+}
+
+/* Standard Textkörpergröße */
+p, span, div, li, a, button, input, textarea, select {
+  font-size: 1rem; /* Standard Textgröße */
+  line-height: 1.6; /* Angenehme Zeilenhöhe */
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Responsive Breakpoints (Optional, aber nützlich für später) */
+/* Beispiel Breakpoints, anpassen nach Design-Bedürfnissen */
+/*
+:root {
+  --breakpoint-small: 576px;
+  --breakpoint-medium: 768px;
+  --breakpoint-large: 992px;
+  --breakpoint-extra-large: 1200px;
+}
+*/
+
+/* Beispiel Media Queries - später verwenden, wenn nötig */
+/*
+@media (max-width: var(--breakpoint-medium)) {
+  body {
+    font-size: 0.9rem; // Kleinere Schriftgröße auf kleineren Bildschirmen
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.7rem;
+  }
+}
+*/

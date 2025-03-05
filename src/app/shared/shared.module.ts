@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    RouterLinkActive,
+    RouterLink
 
   ],
   exports: [
@@ -19,7 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-
+    RouterLinkActive,
+    RouterLink
 
   ]
 })

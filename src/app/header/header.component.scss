@@ -1,0 +1,31 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  color: white; /* Schriftfarbe für den Header */
+  background-color: transparent; /* Optional: Hintergrund transparent machen */
+  position: absolute; /* Um es über den Hauptinhalt zu legen */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* Stellen Sie sicher, dass es über anderem Inhalt liegt */
+}
+
+.logo {
+
+img{
+    height: 28px;
+}
+}
+
+nav {
+  button {
+    background-color: blue; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}
