@@ -3,13 +3,13 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  color: white; /* Schriftfarbe für den Header */
-  background-color: transparent; /* Optional: Hintergrund transparent machen */
-  position: absolute; /* Um es über den Hauptinhalt zu legen */
+  color: white; 
+  background-color: transparent; 
+  position: absolute; 
   top: 0;
   left: 0;
   right: 0;
-  z-index: 10; /* Stellen Sie sicher, dass es über anderem Inhalt liegt */
+  z-index: 10; 
 }
 
 .logo {

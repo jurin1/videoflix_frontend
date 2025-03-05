@@ -1,9 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'DM Sans'; 
+  font-style: normal;
+  font-weight: 400; 
+  font-display: swap; 
+  src: local('DM Sans Regular'), local('DMSans-Regular'),
+       url('/assets/fonts/DMSans-Regular.ttf') format('truetype'); 
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700; 
+  font-display: swap;
+  src: local('DM Sans Bold'), local('DMSans-Bold'),
+       url('/assets/fonts/DMSans-Bold.ttf') format('truetype');
+}
+
+
 html, body {
   margin: 0;
   height: 100%;
-  font-family: 'Arial', sans-serif; /* Standard Schriftfamilie */
-  color: var(--text-color); /* Standard Textfarbe aus Farbpalette */
+  font-family: 'DM Sans', sans-serif; 
+  color: var(--text-color); 
 }
 
 /* Farbpalette */
@@ -11,7 +29,7 @@ html, body {
   --primary-color: #007bff; /* Beispiel: Blau für primäre Elemente */
   --secondary-color: #6c757d; /* Beispiel: Grau für sekundäre Elemente */
   --accent-color: #ffc107; /* Beispiel: Gelb für Akzente */
-  --background-color: #f8f9fa; /* Beispiel: Heller Hintergrund */
+  --background-color: #343a40; /* Beispiel: Heller Hintergrund */
   --dark-background-color: #343a40; /* Beispiel: Dunkler Hintergrund */
   --text-color: #333; /* Standard Textfarbe */
   --light-text-color: #f8f9fa; /* Helle Textfarbe für dunkle Hintergründe */
