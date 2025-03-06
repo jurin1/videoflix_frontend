@@ -107,14 +107,23 @@ h6 {
 
 /* Standard Textkörpergröße */
 p, span, div, li, a, button, input, textarea, select {
-  font-size: 1rem; /* Standard Textgröße */
-  line-height: 1.6; /* Angenehme Zeilenhöhe */
+  font-size: 1rem; 
+  line-height: 1.6; 
 }
 
 a:hover {
   text-decoration: none;
   cursor: pointer;
+  filter: brightness(90%);
 }
+
+button:hover {
+  text-decoration: none;
+  cursor: pointer;
+  filter: brightness(90%);
+}
+
+
 
 /* Responsive Breakpoints (Optional, aber nützlich für später) */
 /* Beispiel Breakpoints, anpassen nach Design-Bedürfnissen */
