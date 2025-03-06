@@ -19,16 +19,17 @@
 
 html, body {
   margin: 0;
-  height: 100%;
+  // height: 100%;
   font-family: 'DM Sans', sans-serif; 
   color: var(--text-color); 
+  background-color: var(--background-color);
 }
 
 /* Farbpalette (SCSS Variablen) */
 $primary-color: #007bff;
 $secondary-color: #6c757d;
 $accent-color: #ffc107;
-$background-color: #f8f9fa;
+$background-color: #000;
 $dark-background-color: #343a40;
 $text-color: #333;
 $light-text-color: #f8f9fa;
