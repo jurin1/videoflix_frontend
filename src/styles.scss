@@ -24,25 +24,45 @@ html, body {
   color: var(--text-color); 
 }
 
-/* Farbpalette */
+/* Farbpalette (SCSS Variablen) */
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$accent-color: #ffc107;
+$background-color: #f8f9fa;
+$dark-background-color: #343a40;
+$text-color: #333;
+$light-text-color: #f8f9fa;
+$error-color: #dc3545;
+$success-color: #28a745;
+
+
+/* Hintergrundfarben Klassen (CSS Variablen bleiben, aber nutzen SCSS Variablen) */
 :root {
-  --primary-color: #007bff; /* Beispiel: Blau für primäre Elemente */
-  --secondary-color: #6c757d; /* Beispiel: Grau für sekundäre Elemente */
-  --accent-color: #ffc107; /* Beispiel: Gelb für Akzente */
-  --background-color: #343a40; /* Beispiel: Heller Hintergrund */
-  --dark-background-color: #343a40; /* Beispiel: Dunkler Hintergrund */
-  --text-color: #333; /* Standard Textfarbe */
-  --light-text-color: #f8f9fa; /* Helle Textfarbe für dunkle Hintergründe */
-  --error-color: #dc3545; /* Beispiel: Rot für Fehler */
-  --success-color: #28a745; /* Beispiel: Grün für Erfolg */
+  --primary-color: #{$primary-color}; /* CSS Variable setzt Wert von SCSS Variable */
+  --secondary-color: #{$secondary-color};
+  --accent-color: #{$accent-color};
+  --background-color: #{$background-color};
+  --dark-background-color: #{$dark-background-color};
+  --text-color: #{$text-color};
+  --light-text-color: #{$light-text-color};
+  --error-color: #{$error-color};
+  --success-color: #{$success-color};
 }
 
-/* Hintergrundfarben */
-.bg-primary { background-color: var(--primary-color); }
+.bg-primary { background-color: var(--primary-color); } /* CSS Variablen Klassen bleiben */
 .bg-secondary { background-color: var(--secondary-color); }
 .bg-accent { background-color: var(--accent-color); }
 .bg-background { background-color: var(--background-color); }
 .bg-dark { background-color: var(--dark-background-color); }
+
+/* Textfarben Klassen (CSS Variablen bleiben, aber nutzen SCSS Variablen) */
+.text-primary { color: var(--primary-color); }
+.text-secondary { color: var(--secondary-color); }
+.text-accent { color: var(--accent-color); }
+.text-text { color: var(--text-color); }
+.text-light { color: var(--light-text-color); }
+.text-error { color: var(--error-color); }
+.text-success { color: var(--success-color); }
 
 /* Textfarben */
 .text-primary { color: var(--primary-color); }
