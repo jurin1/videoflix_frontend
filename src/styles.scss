@@ -125,28 +125,22 @@ button:hover {
 
 
 
-/* Responsive Breakpoints (Optional, aber nützlich für später) */
-/* Beispiel Breakpoints, anpassen nach Design-Bedürfnissen */
-/*
+
+
 :root {
   --breakpoint-small: 576px;
   --breakpoint-medium: 768px;
   --breakpoint-large: 992px;
   --breakpoint-extra-large: 1200px;
 }
-*/
 
-/* Beispiel Media Queries - später verwenden, wenn nötig */
-/*
+
 @media (max-width: var(--breakpoint-medium)) {
-  body {
-    font-size: 0.9rem; // Kleinere Schriftgröße auf kleineren Bildschirmen
-  }
-  h1 {
-    font-size: 2rem;
-  }
-  h2 {
-    font-size: 1.7rem;
+
+  .login-container,
+  .register-container,
+  .forgot-password-container,
+  .reset-password-container {
+    max-width: 70%; 
   }
 }
-*/

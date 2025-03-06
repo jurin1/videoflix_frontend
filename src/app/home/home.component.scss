@@ -1,5 +1,7 @@
+@use "sass:math";
+
 .hero-section {
-  background-image: url('/assets/images/background.jpg');
+  background-image: url("/assets/images/background.jpg");
   background-size: cover;
   background-position: center;
   color: white;
@@ -14,32 +16,31 @@
   box-sizing: border-box;
 
   &::before {
-    content: '';
-    position: absolute; 
+    content: "";
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1; 
+    z-index: 1;
   }
-
 }
 
 .hero-content {
-  position: relative; 
+  position: relative;
   z-index: 2;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
+  justify-content: center;
 }
 
 h1 {
-  font-size: 2.5em;
+  font-size: 2.5rem;
   margin-bottom: 10px;
 }
 
@@ -67,13 +68,12 @@ p {
   }
 }
 
-
 footer {
   padding: 20px;
   text-align: center;
-  color: #f0f0f0; 
+  color: #f0f0f0;
   background-color: transparent;
-  position: absolute; 
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
@@ -83,4 +83,68 @@ footer nav a {
   margin: 0 10px;
   color: inherit;
   text-decoration: none;
+}
+
+@media (max-width: var(--breakpoint-medium)) {
+  .hero-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .hero-content {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 1em;
+    margin-bottom: 15px;
+  }
+
+  .email-signup {
+    flex-direction: column;
+    align-items: stretch;
+
+    input[type="email"] {
+      width: 100%;
+      border-radius: 5px 5px 0 0;
+      border-bottom: none;
+    }
+
+    button {
+      width: 100%;
+      border-radius: 0 0 5px 5px;
+    }
+  }
+}
+
+@media (max-width: 450px) {
+  .hero-section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    .hero-content {
+      padding-left: 10px;
+      padding-right: 10px;
+      width: 200px;
+    }
+
+    h1 {
+      font-size: 1.7em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+
+    .email-signup {
+    }
+  }
 }

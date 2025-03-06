@@ -29,3 +29,10 @@ nav {
     cursor: pointer;
   }
 }
+
+@media (max-width: 768px) {
+  .logo {
+    content: url("/assets/images/logo_small.png");
+    height: 45px;
+  }
+}
