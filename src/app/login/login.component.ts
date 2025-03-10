@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ApiService } from '../api.service';
+import { HttpClientModule } from '@angular/common/http'
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [SharedModule,],
+  imports: [SharedModule, HttpClientModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -13,8 +15,9 @@ import { SharedModule } from '../shared/shared.module';
 export class LoginComponent {
 
   loginForm: FormGroup;
+  backendError: string | null = null;
 
-  constructor() {
+  constructor(private apiService: ApiService) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
@@ -23,9 +26,27 @@ export class LoginComponent {
 
   submitLogin() {
     if (this.loginForm.valid) {
-      console.log('Login Form Value:', this.loginForm.value);
+      this.backendError = null;
+
+      
+      const loginData = {
+        username: this.loginForm.value.email, 
+        password: this.loginForm.value.password
+      };
+
+      this.apiService.loginUser(loginData).subscribe({
+        next: (response) => {
+          console.log('Login erfolgreich:', response);
+          alert('Login erfolgreich!');
+        },
+        error: (errorMessage) => {
+          console.error('Login fehlgeschlagen:', errorMessage);
+          this.backendError = errorMessage;
+        }
+      });
     } else {
       console.log('Formular ist ungültig');
+      this.backendError = null;
     }
   }
 }

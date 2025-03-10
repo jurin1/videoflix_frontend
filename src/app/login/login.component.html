@@ -1,6 +1,9 @@
 <div class="login-page">
     <div class="login-container">
         <h2>Log in</h2>
+                <div *ngIf="backendError" class="backend-error-message">
+                    {{ backendError }}
+                </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
             <div class="form-group">
