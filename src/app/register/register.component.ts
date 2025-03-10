@@ -5,12 +5,11 @@ import { Subject, takeUntil, debounceTime, filter } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ToastrService } from 'ngx-toastr';
 
-
 function emailDomainValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const valid = emailRegex.test(control.value);
-    return valid ? null : { 'emailDomain': true }; 
+    return valid ? null : { 'emailDomain': true };
   };
 }
 
@@ -31,6 +30,7 @@ function passwordMatchValidator(control: AbstractControl): { [key: string]: any 
   }
 }
 
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -48,10 +48,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private toastr: ToastrService
   ) {
     this.registerForm = new FormGroup({
+      username: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, emailDomainValidator()]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      confirmPassword: new FormControl('', [Validators.required])
-    }, passwordMatchValidator as ValidatorFn);
+      confirmPassword: new FormControl('', [Validators.required]) // **Confirm Password Feld BEIBEHALTEN**
+    }, passwordMatchValidator as ValidatorFn); // **Password Match Validator BEIBEHALTEN**
   }
 
   ngOnInit(): void {
@@ -64,7 +65,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   private setupRealTimeValidation() {
-    ['email', 'password', 'confirmPassword'].forEach(controlName => {
+    ['username', 'email', 'password', 'confirmPassword'].forEach(controlName => { // **"confirmPassword" wieder hinzufügen**
       const control = this.registerForm.get(controlName);
       if (control) {
         control.valueChanges.pipe(
@@ -81,14 +82,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
   submitRegister() {
     if (this.registerForm.valid) {
       console.log('Register Form Value:', this.registerForm.value);
-      this.apiService.registerUser(this.registerForm.value).subscribe({
+      // API-Aufruf zur Registrierung - Daten angepasst
+      const registerData = {
+        username: this.registerForm.value.username,
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+        // confirm_password: this.registerForm.value.confirmPassword,  **Confirm Password NICHT mit senden**
+      };
+
+      this.apiService.registerUser(registerData).subscribe({
         next: (response) => {
           console.log('Registrierung erfolgreich:', response);
-          this.toastr.success('Registrierung erfolgreich! Bitte überprüfe deine E-Mails, um dein Konto zu aktivieren.', 'Erfolg'); 
+          this.toastr.success('Registrierung erfolgreich! Bitte überprüfe deine E-Mails, um dein Konto zu aktivieren.', 'Erfolg');
         },
         error: (error) => {
           console.error('Registrierung fehlgeschlagen:', error);
-          this.toastr.error('Registrierung fehlgeschlagen. Bitte versuche es erneut.', 'Fehler'); 
+          this.toastr.error(error.error.error, 'Registrierung Fehler');
         }
       });
     } else {

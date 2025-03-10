@@ -1,8 +1,8 @@
 .register-page {
-  background-image: url('/assets/images/login_background.jpg'); /* Hintergrundbild (wie Login-Seite) */
+  background-image: url('/assets/images/login_background.jpg');
   background-size: cover;
   background-position: center;
-  background-color: rgba(0, 0, 0, 0.5); /* Schwarzer Overlay (wie Login-Seite) */
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
   min-height: 100vh;
   display: flex;
@@ -11,6 +11,10 @@
   align-items: center;
   position: relative;
   box-sizing: border-box;
+
+  p{
+    line-height: 0.6 !important;
+  }
 
   &::before {
     content: '';
@@ -27,7 +31,7 @@
 .register-container {
   background-color: white;
   color: var(--text-color); 
-  padding: 40px;
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
   text-align: center;
@@ -42,13 +46,12 @@ h2 {
   margin-bottom: 30px;
 }
 
-p {
-  margin-bottom: 30px;
-}
+
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: left;
+
 
   label {
     display: block;
@@ -57,13 +60,27 @@ p {
   }
 
   input[type="email"],
-  input[type="password"] {
+  input[type="password"],
+  input[type="text"] {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
+    padding: 10px;
+    border: 1.5px solid var(--primary-color);
     border-radius: 5px;
     box-sizing: border-box;
+    margin-bottom: 15px;
+
+          &::placeholder { 
+      color: var(--primary-color);
+      opacity: 1; 
+    }
+
+    &:focus{
+      border-color: var(--primary-color);
+      outline: none;
+    }
   }
+
+
 }
 
 
