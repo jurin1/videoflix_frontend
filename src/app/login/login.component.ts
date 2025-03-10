@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ApiService } from '../api.service';
 import { HttpClientModule } from '@angular/common/http'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   backendError: string | null = null;
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private router: Router) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
@@ -37,7 +38,8 @@ export class LoginComponent {
       this.apiService.loginUser(loginData).subscribe({
         next: (response) => {
           console.log('Login erfolgreich:', response);
-          alert('Login erfolgreich!');
+          localStorage.setItem('authToken', response.token);
+          this.router.navigate(['/dashboard']);
         },
         error: (errorMessage) => {
           console.error('Login fehlgeschlagen:', errorMessage);
