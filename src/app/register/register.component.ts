@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { Subject, takeUntil, debounceTime, filter } from 'rxjs';
+import { ApiService } from '../api.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 function emailDomainValidator(): ValidatorFn {
@@ -41,7 +43,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   private destroy$ = new Subject<void>();
 
-  constructor() {
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService
+  ) {
     this.registerForm = new FormGroup({
       email: new FormControl('', [Validators.required, emailDomainValidator()]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -76,6 +81,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
   submitRegister() {
     if (this.registerForm.valid) {
       console.log('Register Form Value:', this.registerForm.value);
+      this.apiService.registerUser(this.registerForm.value).subscribe({
+        next: (response) => {
+          console.log('Registrierung erfolgreich:', response);
+          this.toastr.success('Registrierung erfolgreich! Bitte überprüfe deine E-Mails, um dein Konto zu aktivieren.', 'Erfolg'); 
+        },
+        error: (error) => {
+          console.error('Registrierung fehlgeschlagen:', error);
+          this.toastr.error('Registrierung fehlgeschlagen. Bitte versuche es erneut.', 'Fehler'); 
+        }
+      });
     } else {
       console.log('Formular ist ungültig');
     }

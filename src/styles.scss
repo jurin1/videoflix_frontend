@@ -145,3 +145,70 @@ button:hover {
     max-width: 70%; 
   }
 }
+
+.toast-container{
+  position: fixed;
+  bottom: 25px;
+  margin-left: 5px;
+  z-index: 9999;  
+}
+
+.toast-success {
+  background-color: #f8f9fa;
+  color: black;
+  border-radius: 8px;
+  padding: 8px 8px;
+  .toast-title{
+    color: green;
+  }
+}
+
+
+.toast-error {
+  background-color: #f8f9fa;
+  color: black;
+  border-radius: 8px;
+  padding: 8px 8px;
+  .toast-title{
+    color: var(--error-color);
+  }
+}
+
+.toast-warning {
+  background-color: #f8f9fa;
+  color: black;
+  border-radius: 8px;
+  padding: 8px 8px;
+  .toast-title{
+    color: orange;
+  }
+}
+
+.toast-info {
+  background-color: #f8f9fa;
+  color: black;
+  border-radius: 8px;
+  padding: 8px 8px;
+  .toast-title{
+    color: #17a2b8;
+  }
+}
+
+.toast-title {
+  font-weight: bold; 
+
+
+}
+
+
+
+.toast-close-button {
+  color: white !important; 
+  opacity: 0.8 !important;
+}
+
+
+.toast {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
