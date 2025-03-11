@@ -1,1 +1,71 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+
+    <section class="hero-section" *ngIf="heroVideo">
+        <div class="hero-content">
+            <div class="video-player-placeholder">
+                <img [src]="heroVideo.thumbnail" alt="{{ heroVideo.title }}" class="hero-video-thumbnail">
+                <button class="play-button">
+                    <i class="fas fa-play"></i> Play
+                </button>
+            </div>
+            <div class="video-details">
+                <h2 class="hero-video-title">{{ heroVideo.title }}</h2>
+                <p class="hero-video-description">
+                    {{ heroVideo.description }}
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section" *ngIf="newOnVideoflixVideos.length > 0">
+        <h3 class="category-title">New on Videoflix</h3>
+        <div class="video-list">
+            <div class="video-card" *ngFor="let video of newOnVideoflixVideos">
+                <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                <h4 class="video-title">{{ video.title }}</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section" *ngIf="documentaryVideos.length > 0">
+        <h3 class="category-title">Documentary</h3>
+        <div class="video-list">
+            <div class="video-card" *ngFor="let video of documentaryVideos">
+                <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                <h4 class="video-title">{{ video.title }}</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section" *ngIf="dramaVideos.length > 0">
+        <h3 class="category-title">Drama</h3>
+        <div class="video-list">
+            <div class="video-card" *ngFor="let video of dramaVideos">
+                <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                <h4 class="video-title">{{ video.title }}</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section" *ngIf="comedyVideos.length > 0">
+        <h3 class="category-title">Romance</h3>
+        <div class="video-list">
+            <div class="video-card" *ngFor="let video of comedyVideos">
+                <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                <h4 class="video-title">{{ video.title }}</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section" *ngIf="continueWatchingVideos.length > 0">
+        <h3 class="category-title">Continue Watching</h3>
+        <div class="video-list">
+            <div class="video-card" *ngFor="let video of continueWatchingVideos">
+                <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                <h4 class="video-title">{{ video.title }}</h4>
+            </div>
+        </div>
+    </section>
+
+
+</div>
