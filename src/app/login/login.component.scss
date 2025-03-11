@@ -12,7 +12,11 @@
   position: relative;
   box-sizing: border-box;
 
-  &::before { 
+  p{
+    line-height: 0.6 !important;
+  }
+
+  &::before {
     content: '';
     position: absolute;
     top: 0;
@@ -24,43 +28,6 @@
   }
 }
 
-.login-container {
-  background-color: white;
-  color: var(--text-color); /* Textfarbe aus globalen Styles */
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Optionaler Schatten */
-  text-align: center;
-  position: relative; /* Für z-index, um über dem Overlay zu sein, falls nötig */
-  z-index: 2; /* Über dem Overlay positionieren */
-  width: 400px; /* Breite des Containers */
-  max-width: 70%; /* Responsiv machen */
-}
-
-h2 {
-  color: var(--primary-color); /* Primärfarbe aus globalen Styles */
-  margin-bottom: 30px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-  text-align: left; 
-
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; 
-  }
-}
 
 .password-group {
   position: relative; 
@@ -77,42 +44,6 @@ h2 {
   opacity: 0.7; 
 }
 
-.login-button {
-  background-color: var(--primary-color); 
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.1em;
-  transition: background-color 0.3s ease; 
-  &:hover {
-     filter: brightness(90%);
-  }
 
-   &:disabled { 
-    background-color: gray; 
-    color: #ccc;        
-    cursor: not-allowed; 
-    opacity: 0.7;        
-  }
-}
 
-.links {
-  margin-top: 20px;
-  font-size: 0.9em;
-
-  a {
-    color: var(--primary-color); 
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline; 
-    }
-  }
-
-  p {
-    margin-top: 10px;
-  }
-}
 

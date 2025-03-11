@@ -1,5 +1,5 @@
 <div class="register-page">
-    <div class="register-container">
+    <div class="user-container">
         <h2>Sign Up</h2>
         <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
             <div class="form-group">
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="register-button" [disabled]="!registerForm.valid">Sign Up</button>
+            <button type="submit" class="user-button" [disabled]="!registerForm.valid">Sign Up</button>
 
             <div class="links">
                 <p>Already have an account? <a routerLink="/login">Log in</a></p>
