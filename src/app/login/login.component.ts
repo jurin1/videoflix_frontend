@@ -5,6 +5,7 @@ import { ApiService } from '../api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -32,7 +34,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
 
       const loginData = {
-        username: this.loginForm.value.email,
+        email: this.loginForm.value.email,
         password: this.loginForm.value.password
       };
 
@@ -40,6 +42,7 @@ export class LoginComponent {
         next: (response) => {
           console.log('Login erfolgreich:', response);
           localStorage.setItem('authToken', response.token);
+          this.authService.loginSuccessful();
           this.router.navigate(['/dashboard']);
           this.toastr.success('Login erfolgreich!', 'Erfolg'); 
         },
