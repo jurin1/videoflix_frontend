@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'; 
 import { Observable, throwError } from 'rxjs'; 
-import { catchError } from 'rxjs/operators'; 
 
 @Injectable({
   providedIn: 'root'
@@ -16,34 +15,15 @@ export class ApiService {
   }
 
   loginUser(credentials: any): Observable<any> {
-    return this.http.post(`${this.backendUrl}/users/login/`, credentials).pipe( 
-      catchError(this.handleError) 
-    );
+    return this.http.post(`${this.backendUrl}/users/login/`, credentials); 
   }
 
-  logoutUser(): Observable<any> {
-    return this.http.post(`${this.backendUrl}/users/logout/`, {});
+  resetPassword(resetData: any, uuid:any, token:any): Observable<any> {
+    return this.http.post(`${this.backendUrl}/users/password/reset/confirm/${uuid}/${token}/`, resetData);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Etwas ist schiefgelaufen; bitte versuche es später noch einmal.'; 
-
-    if (error.error instanceof ErrorEvent) {
-
-      console.error('Ein Fehler ist aufgetreten:', error.error.message);
-      errorMessage = `Fehler: ${error.error.message}`; 
-    } else {
-
-      console.error(
-        `Backend Fehlercode: ${error.status}, ` +
-        `Nachricht: ${error.error}`); 
-
-      if (error.status === 401) { 
-        errorMessage = 'Ungültige Anmeldedaten. Bitte überprüfe deine E-Mail und dein Passwort.'; 
-      } else {
-        errorMessage = `Backend Fehler: ${error.status}, ${error.error}`; 
-      }
-    }
-    return throwError(() => errorMessage); 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.backendUrl}/users/password/reset/`, { email });
   }
+  
 }
