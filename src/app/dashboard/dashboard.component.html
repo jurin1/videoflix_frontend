@@ -1,12 +1,20 @@
 <div class="dashboard-container">
 
     <section class="hero-section" *ngIf="heroVideo">
+        <!-- Hero Video Teaser Bereich -->
         <div class="hero-content">
-            <div class="video-player-placeholder">
-                <img [src]="heroVideo.thumbnail" alt="{{ heroVideo.title }}" class="hero-video-thumbnail">
-                <button class="play-button">
-                    <i class="fas fa-play"></i> Play
-                </button>
+            <div class="video-player-container">
+                <!-- Video Player Container -->
+                <video #heroVideoPlayer 
+                    class="video-js vjs-default-skin"
+                    controls
+                    preload="auto"
+                    width="640"
+                    height="264"
+                    poster="{{ heroVideo.thumbnail }}" 
+                    data-setup="{}"
+                    >
+                </video>
             </div>
             <div class="video-details">
                 <h2 class="hero-video-title">{{ heroVideo.title }}</h2>
@@ -20,6 +28,7 @@
     <section class="category-section" *ngIf="newOnVideoflixVideos.length > 0">
         <h3 class="category-title">New on Videoflix</h3>
         <div class="video-list">
+            <!-- Video Kacheln für "New on Videoflix" -->
             <div class="video-card" *ngFor="let video of newOnVideoflixVideos">
                 <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
                 <h4 class="video-title">{{ video.title }}</h4>
@@ -30,6 +39,7 @@
     <section class="category-section" *ngIf="documentaryVideos.length > 0">
         <h3 class="category-title">Documentary</h3>
         <div class="video-list">
+            <!-- Video Kacheln für "Documentary" -->
             <div class="video-card" *ngFor="let video of documentaryVideos">
                 <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
                 <h4 class="video-title">{{ video.title }}</h4>
@@ -40,6 +50,7 @@
     <section class="category-section" *ngIf="dramaVideos.length > 0">
         <h3 class="category-title">Drama</h3>
         <div class="video-list">
+            <!-- Video Kacheln für "Drama" -->
             <div class="video-card" *ngFor="let video of dramaVideos">
                 <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
                 <h4 class="video-title">{{ video.title }}</h4>
@@ -48,9 +59,21 @@
     </section>
 
     <section class="category-section" *ngIf="comedyVideos.length > 0">
-        <h3 class="category-title">Romance</h3>
+        <h3 class="category-title">Comedy</h3>
         <div class="video-list">
+            <!-- Video Kacheln für "Comedy" -->
             <div class="video-card" *ngFor="let video of comedyVideos">
+                <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                <h4 class="video-title">{{ video.title }}</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-section" *ngIf="actionVideos.length > 0">
+        <h3 class="category-title">Action</h3>
+        <div class="video-list">
+            <!-- Video Kacheln für "Action" -->
+            <div class="video-card" *ngFor="let video of actionVideos">
                 <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
                 <h4 class="video-title">{{ video.title }}</h4>
             </div>

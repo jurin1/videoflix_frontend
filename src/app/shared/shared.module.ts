@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterLinkActive } from '@angular/router';
 import { RouterLink } from '@angular/router';
 
+
 @NgModule({
   declarations: [
 
@@ -17,7 +18,6 @@ import { RouterLink } from '@angular/router';
     RouterLinkActive,
     RouterLink,
 
-
   ],
   exports: [
     CommonModule,
@@ -26,7 +26,6 @@ import { RouterLink } from '@angular/router';
     HttpClientModule,
     RouterLinkActive,
     RouterLink,
-
 
   ]
 })
