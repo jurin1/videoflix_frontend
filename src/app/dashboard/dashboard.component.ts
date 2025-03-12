@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       console.log(`Video URL wird gesetzt (Auflösung: ${resolution}):`, videoUrl);
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
-        controls: true,
+        controls: false,
         autoplay: true,
         muted: true,
         preload: 'auto',
