@@ -8,21 +8,20 @@
   box-sizing: border-box;
 }
 
-.hero-section {
-  position: relative;
-  overflow: hidden;
-}
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   position: relative;
   z-index: 2;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  height: 500px;
-  z-index: 1;
+  box-sizing: border-box;
+  max-width: 1200px;
+  text-align: center;
+  justify-content: center;
+  height: 72vh; 
 }
 
 .video-player-container {
@@ -30,10 +29,12 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%; 
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  padding-bottom: 0;
+
 
   &::before {
     content: '';
@@ -48,40 +49,71 @@
   }
 
   video{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-  }
-
-
-.video-js {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+}
+
+.video-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 105%;
+  z-index: 1 ;
 }
 
 .video-details{
   position: absolute;
-  z-index: 5;
-  top: 50px;
+  top: 80px;
   left: 25px;
-
-  h2{
-  font-size: 5em; 
-  color: white !important;
-  }
-  p{
-    font-size: 0.8em;
-  }
+  z-index: 4;
 }
 
 .hero-video-title {
-  font-size: 2.5em;
+  font-size: 4.5em;
   margin-bottom: 10px;
+  color: white;
 }
 
 .hero-video-description {
-  max-width: 400px;
+  font-size: 0.8em;
+  max-width: 300px;
+  text-align: left;
+
+}
+
+
+@media (min-width: 1921px) {
+  .hero-video-title {
+    font-size: 2.2em;
+  }
+
+  .hero-video-description {
+    font-size: 1.1em;
+    max-width: 800px;
+  }
+
+  .hero-content {
+    gap: 15px;
+  }
+}
+
+
+@media (min-width: 2560px) {
+    .hero-video-title {
+        font-size: 2.0em;
+    }
+
+    .hero-video-description {
+        font-size: 1.0em;
+    }
 }
 
 .category-section {
@@ -94,22 +126,22 @@
 }
 
 .category-carousel {
-  position: relative; /* Für absolute Positionierung der Pfeile */
+  position: relative;
   display: flex;
-  align-items: center; /* Pfeile vertikal zentrieren */
+  align-items: center;
 }
 
 .carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5); /* Halbtransparenter Hintergrund */
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  padding: 8px; /* Etwas kleineres Padding */
-  border-radius: 50%; /* Runde Pfeil-Buttons */
+  padding: 8px;
+  border-radius: 50%;
   cursor: pointer;
-  z-index: 10; /* Sicherstellen, dass Pfeile über dem Inhalt liegen */
+  z-index: 10;
   opacity: 0.7;
   transition: opacity 0.3s ease;
 
@@ -118,25 +150,25 @@
   }
 
   &.left {
-    left: -10px; /* Positionierung links */
+    left: -10px;
   }
 
   &.right {
-    right: -10px; /* Positionierung rechts */
+    right: -10px;
   }
 }
 
 
 .video-list {
   display: flex;
-  overflow-x: auto; /* Scrollbalken aktivieren (aber ausblenden) */
+  overflow-x: auto;
   gap: 15px;
-  scroll-behavior: smooth; /* Sanftes Scrollen (optional) */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE und Edge */
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
   }
 }
 
@@ -151,16 +183,11 @@
   border-radius: 8px;
   margin-bottom: 8px;
   height: 300px;
-  object-fit: cover; 
-  object-position: center; 
+  object-fit: cover;
+  object-position: center;
 }
 
 .video-title {
   font-size: 1em;
   margin-top: 0;
 }
-
-
-
-
-

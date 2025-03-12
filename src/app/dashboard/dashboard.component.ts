@@ -1,10 +1,18 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+  Renderer2,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ApiService } from '../api.service';
 import { Subject, takeUntil } from 'rxjs';
 import videojs from 'video.js';
 import { ToastrService } from 'ngx-toastr';
-import { ChangeDetectorRef } from '@angular/core';
 
 export interface VideoResponse {
   id: number;
@@ -31,9 +39,9 @@ type VideoResolution = '120p' | '360p' | '720p' | '1080p';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  heroVideo: VideoResponse | any;
+  heroVideo: VideoResponse | undefined;
   newOnVideoflixVideos: VideoResponse[] = [];
   documentaryVideos: VideoResponse[] = [];
   dramaVideos: VideoResponse[] = [];
@@ -45,6 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   player: any;
 
   @ViewChild('heroVideoPlayer', { static: false }) heroVideoPlayerRef: ElementRef | undefined;
+  @ViewChild('heroContent', { static: false }) heroContentRef: ElementRef | undefined;
   @ViewChild('newOnVideoflixCarousel', { static: false }) newOnVideoflixCarouselRef: ElementRef | undefined;
   @ViewChild('documentaryCarousel', { static: false }) documentaryCarouselRef: ElementRef | undefined;
   @ViewChild('dramaCarousel', { static: false }) dramaCarouselRef: ElementRef | undefined;
@@ -67,7 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     }
   }
 
-  constructor(private apiService: ApiService, private toastr: ToastrService, private cdRef: ChangeDetectorRef) { }
+  constructor(private apiService: ApiService, private toastr: ToastrService, private cdRef: ChangeDetectorRef, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.loadVideoData()
@@ -79,17 +88,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit wurde aufgerufen!');
-  }
-
-  ngAfterViewChecked(): void {
-    this.checkCarouselNeeds('newOnVideoflix', this.newOnVideoflixCarouselRef);
-    this.checkCarouselNeeds('documentary', this.documentaryCarouselRef);
-    this.checkCarouselNeeds('drama', this.dramaCarouselRef);
-    this.checkCarouselNeeds('comedy', this.comedyCarouselRef);
-    this.checkCarouselNeeds('action', this.actionCarouselRef);
-    this.checkCarouselNeeds('continueWatching', this.continueWatchingCarouselRef);
-    this.cdRef.detectChanges();
   }
 
 
@@ -144,20 +142,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (videos: VideoResponse[]) => {
-          console.log('Video Daten vom Backend erhalten:', videos);
 
           if (videos && videos.length > 0) {
             this.heroVideo = videos[0];
 
-            console.log('heroVideoPlayerRef before init:', this.heroVideoPlayerRef);
-            console.log('heroVideo:', this.heroVideo);
 
             setTimeout(() => {
-              this.initializeVideoPlayer(this.heroVideo);
-              console.log('heroVideoPlayerRef after init (setTimeout):', this.heroVideoPlayerRef);
+              if (this.heroVideo) {
+                this.initializeVideoPlayer(this.heroVideo);
+              }
             }, 0);
 
-            console.log('heroVideoPlayerRef after init (outside setTimeout):', this.heroVideoPlayerRef);
 
             this.newOnVideoflixVideos = videos.filter(video => video.genre === 'NewOnVideoflix');
             this.documentaryVideos = videos.filter(video => video.genre === 'Documentary');
@@ -166,12 +161,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
             this.actionVideos = videos.filter(video => video.genre === 'Action');
 
           } else {
-            console.warn('Keine Videos vom Backend erhalten oder Response ist leer.');
             this.toastr.warning('Keine Videos gefunden.', 'Warnung');
           }
         },
         error: (error) => {
-          console.error('Fehler beim Laden der Video Daten:', error);
           this.toastr.error('Fehler beim Laden der Videos. Bitte versuche es später noch einmal.', 'Fehler');
         }
       });
@@ -181,11 +174,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (continueWatchingVideos: VideoResponse[]) => {
-          console.log('"Continue Watching" Videos vom Backend erhalten:', continueWatchingVideos);
           this.continueWatchingVideos = continueWatchingVideos || [];
         },
         error: (error) => {
-          console.error('Fehler beim Laden der "Continue Watching" Videos:', error);
           this.toastr.error('Fehler beim Laden der "Continue Watching" Videos. Bitte versuche es später noch einmal.', 'Fehler');
         }
       });
@@ -198,7 +189,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
 
       videoUrl = `http://localhost:8000${videoUrl}`;
 
-      console.log(`Video URL wird gesetzt (Auflösung: ${resolution}):`, videoUrl);
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
         controls: false,
@@ -213,8 +203,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         type: 'video/mp4'
       });
     } else {
-      console.warn('heroVideoPlayerRef is still undefined or video.resolutions missing in initializeVideoPlayer');
     }
   }
-
 }
