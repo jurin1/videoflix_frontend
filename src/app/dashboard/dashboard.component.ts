@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core'; // AfterViewInit, ElementRef, ViewChild importieren
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ApiService } from '../api.service';
 import { Subject, takeUntil } from 'rxjs';
 import videojs from 'video.js';
-
-
+import { ToastrService } from 'ngx-toastr'; // ToastrService importieren
 
 export interface VideoResponse {
   id: number;
@@ -22,6 +21,7 @@ export interface VideoResponse {
   genre: string;
 }
 
+type VideoResolution = '120p' | '360p' | '720p' | '1080p'; // Definieren des VideoResolution Typs
 
 @Component({
   selector: 'app-dashboard',
@@ -30,9 +30,9 @@ export interface VideoResponse {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { // AfterViewInit implementieren
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  heroVideo: VideoResponse | null = null;
+  heroVideo: VideoResponse | any;
   newOnVideoflixVideos: VideoResponse[] = [];
   documentaryVideos: VideoResponse[] = [];
   dramaVideos: VideoResponse[] = [];
@@ -43,21 +43,21 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { //
 
   player: any;
 
-  @ViewChild('heroVideoPlayer', { static: false }) heroVideoPlayerRef: ElementRef | undefined; // Referenz auf das <video>-Element im Template
+  @ViewChild('heroVideoPlayer', { static: false }) heroVideoPlayerRef: ElementRef | undefined;
 
-  private getVideoResolution(): string { 
-    const screenWidth = window.screen.width; 
+  private getVideoResolution(): string {
+    const screenWidth = window.screen.width;
 
-    if (screenWidth <= 768) { 
+    if (screenWidth <= 768) {
       return '360p';
     } else if (screenWidth <= 1024) {
       return '720p';
-    } else { 
+    } else {
       return '1080p';
     }
   }
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private toastr: ToastrService) { } // ToastrService injecten
 
   ngOnInit(): void {
     this.loadVideoData();
@@ -69,9 +69,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { //
   }
 
   ngAfterViewInit(): void {
-    if (this.heroVideo && this.heroVideoPlayerRef) {
-      this.initializeVideoPlayer(this.heroVideo); 
-    }
+    console.log('ngAfterViewInit wurde aufgerufen!'); // Keep this to verify ngAfterViewInit is called
+    // Remove the initialization from here - we will do it in the 'next' block
+    // if (this.heroVideo && this.heroVideoPlayerRef) {
+    //   this.initializeVideoPlayer(this.heroVideo);
+    // }
   }
 
 
@@ -85,9 +87,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { //
           if (videos && videos.length > 0) {
             this.heroVideo = videos[0];
 
-            if (this.heroVideoPlayerRef) {
+            console.log('heroVideoPlayerRef before init:', this.heroVideoPlayerRef);
+            console.log('heroVideo:', this.heroVideo);
+
+            // **Füge setTimeout HIER hinzu, um die Initialisierung zu verzögern**
+            setTimeout(() => {
               this.initializeVideoPlayer(this.heroVideo);
-            }
+              console.log('heroVideoPlayerRef after init (setTimeout):', this.heroVideoPlayerRef); // Log innerhalb setTimeout
+            }, 0); // 0 Millisekunden Verzögerung (so kurz wie möglich)
+
+
+            console.log('heroVideoPlayerRef after init (outside setTimeout):', this.heroVideoPlayerRef); // Log außerhalb setTimeout - zum Vergleich
 
 
             this.newOnVideoflixVideos = videos.filter(video => video.genre === 'NewOnVideoflix');
@@ -98,11 +108,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { //
 
           } else {
             console.warn('Keine Videos vom Backend erhalten oder Response ist leer.');
+            this.toastr.warning('Keine Videos gefunden.', 'Warnung'); // Toast-Nachricht bei leeren Videos
           }
         },
         error: (error) => {
           console.error('Fehler beim Laden der Video Daten:', error);
-          // TODO: Toast Nachricht
+          this.toastr.error('Fehler beim Laden der Videos. Bitte versuche es später noch einmal.', 'Fehler'); // Toast-Fehlermeldung
         }
       });
 
@@ -116,18 +127,20 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { //
         },
         error: (error) => {
           console.error('Fehler beim Laden der "Continue Watching" Videos:', error);
-          // TODO: Toast Nachricht
+          this.toastr.error('Fehler beim Laden der "Continue Watching" Videos. Bitte versuche es später noch einmal.', 'Fehler'); // Toast-Fehlermeldung
         }
       });
   }
 
-  private initializeVideoPlayer(video: VideoResponse) { 
-    if (this.heroVideoPlayerRef && video.resolutions) { 
+  private initializeVideoPlayer(video: VideoResponse) {
+    if (this.heroVideoPlayerRef && video.resolutions) { // Keep the condition inside initializePlayer for safety
+      const resolution = this.getVideoResolution() as VideoResolution;
+      let videoUrl = video.resolutions[resolution] || video.video_file;
 
-      const resolution = this.getVideoResolution(); 
-      const videoUrl = video.resolutions[resolution as keyof VideoResponse['resolutions']] || video.video_file; 
+      // **Basis-URL HIER voranstellen**
+      videoUrl = `http://localhost:8000${videoUrl}`;
 
-      console.log(`Video URL wird gesetzt (Auflösung: ${resolution}):`, videoUrl); 
+      console.log(`Video URL wird gesetzt (Auflösung: ${resolution}):`, videoUrl);
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
         controls: true,
@@ -141,6 +154,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit { //
         src: videoUrl,
         type: 'video/mp4'
       });
+    } else {
+      console.warn('heroVideoPlayerRef is still undefined or video.resolutions missing in initializeVideoPlayer'); // Add warning log
     }
   }
 
