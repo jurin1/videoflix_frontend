@@ -16,12 +16,10 @@
   position: relative;
   z-index: 2;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   box-sizing: border-box;
-  max-width: 1200px;
   text-align: center;
   justify-content: center;
-  height: 72vh; 
+  height: calc((140vw * 9 / 16) * (374 / 702));
 }
 
 .video-player-container {
@@ -64,29 +62,28 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 105%;
+  width: 100vw;
+  height: calc(70vw * 9 / 16);
   z-index: 1 ;
 }
 
-.video-details{
+.video-details {
   position: absolute;
-  top: 80px;
-  left: 25px;
+  top: calc((100vw * 9 / 16) * (374 / 702) * 0.2); 
+  left: 2.5vw; 
   z-index: 4;
 }
 
 .hero-video-title {
-  font-size: 4.5em;
+  font-size: calc(60 * (100vw / 896)); 
   margin-bottom: 10px;
   color: white;
 }
 
 .hero-video-description {
-  font-size: 0.8em;
-  max-width: 300px;
+  font-size: calc(10 * (100vw / 896));
+  max-width: 30vw; 
   text-align: left;
-
 }
 
 
