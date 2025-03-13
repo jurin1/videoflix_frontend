@@ -5,6 +5,8 @@ import { Subject, takeUntil } from 'rxjs';
 import videojs from 'video.js';
 import { ToastrService } from 'ngx-toastr';
 import { VideoPlayerComponent } from '../video-player/video-player.component';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 export interface VideoResponse {
   id: number;
@@ -27,11 +29,12 @@ type VideoResolution = '120p' | '360p' | '720p' | '1080p';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [SharedModule, VideoPlayerComponent],
+  imports: [SharedModule, VideoPlayerComponent, FontAwesomeModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+  faPlay = faPlay;
 
   heroVideo: VideoResponse | any;
   newOnVideoflixVideos: VideoResponse[] = [];

@@ -1,8 +1,7 @@
 <section class="hero-section" *ngIf="heroVideo">
     <div class="hero-content">
         <div class="video-player-container">
-            <video #heroVideoPlayer class="video-js vjs-default-skin" controls preload="auto"
-                 data-setup="{}">
+            <video #heroVideoPlayer class="video-js vjs-default-skin" controls preload="auto" data-setup="{}">
             </video>
         </div>
         <div class="video-details">
@@ -10,6 +9,9 @@
             <p class="hero-video-description">
                 {{ heroVideo.description }}
             </p>
+            <button class="play-button" (click)="openVideoModal(heroVideo)">
+                <fa-icon [icon]="faPlay"></fa-icon> Play
+            </button>
         </div>
     </div>
 </section>
@@ -22,9 +24,13 @@
                 (click)="scrollCarousel('newOnVideoflix', -1)">‹</button>
             <div class="video-list" #newOnVideoflixCarousel>
                 <div class="video-card" *ngFor="let video of newOnVideoflixVideos">
-                    <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    <a><a (click)="openVideoModal(video)">
+                            <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                        </a>
+                        <h4 class="video-title">{{ video.title }}</h4>
+                    </a>
                     <h4 class="video-title">{{ video.title }}</h4>
-                    <button (click)="openVideoModal(video)">Play Video</button>
+
                 </div>
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['newOnVideoflix']"
@@ -39,9 +45,12 @@
                 (click)="scrollCarousel('documentary', -1)">‹</button>
             <div class="video-list" #documentaryCarousel>
                 <div class="video-card" *ngFor="let video of documentaryVideos">
-                    <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
-                    <h4 class="video-title">{{ video.title }}</h4>
-                    <button (click)="openVideoModal(video)">Play Video</button>
+                    <a (click)="openVideoModal(video)">
+                        <a (click)="openVideoModal(video)">
+                            <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                        </a>
+                        <h4 class="video-title">{{ video.title }}</h4>
+                    </a>
                 </div>
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['documentary']"
@@ -56,9 +65,10 @@
                 (click)="scrollCarousel('drama', -1)">‹</button>
             <div class="video-list" #dramaCarousel>
                 <div class="video-card" *ngFor="let video of dramaVideos">
-                    <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    <a (click)="openVideoModal(video)">
+                        <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    </a>
                     <h4 class="video-title">{{ video.title }}</h4>
-                    <button (click)="openVideoModal(video)">Play Video</button>
                 </div>
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['drama']"
@@ -73,9 +83,10 @@
                 (click)="scrollCarousel('comedy', -1)">‹</button>
             <div class="video-list" #comedyCarousel>
                 <div class="video-card" *ngFor="let video of comedyVideos">
-                    <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    <a (click)="openVideoModal(video)">
+                        <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    </a>
                     <h4 class="video-title">{{ video.title }}</h4>
-                    <button (click)="openVideoModal(video)">Play Video</button>
                 </div>
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['comedy']"
@@ -90,9 +101,10 @@
                 (click)="scrollCarousel('action', -1)">‹</button>
             <div class="video-list" #actionCarousel>
                 <div class="video-card" *ngFor="let video of actionVideos">
-                    <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    <a (click)="openVideoModal(video)">
+                        <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    </a>
                     <h4 class="video-title">{{ video.title }}</h4>
-                    <button (click)="openVideoModal(video)">Play Video</button>
                 </div>
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['action']"
@@ -107,9 +119,10 @@
                 (click)="scrollCarousel('continueWatching', -1)">‹</button>
             <div class="video-list" #continueWatchingCarousel>
                 <div class="video-card" *ngFor="let video of continueWatchingVideos">
-                    <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    <a (click)="openVideoModal(video)">
+                        <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
+                    </a>
                     <h4 class="video-title">{{ video.title }}</h4>
-                    <button (click)="openVideoModal(video)">Play Video</button>
                 </div>
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['continueWatching']"

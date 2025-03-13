@@ -6,7 +6,6 @@ import { RouterLinkActive } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { VideoPlayerComponent } from '../video-player/video-player.component';
 
-
 @NgModule({
   declarations: [
 
@@ -18,7 +17,8 @@ import { VideoPlayerComponent } from '../video-player/video-player.component';
     HttpClientModule,
     RouterLinkActive,
     RouterLink,
-    VideoPlayerComponent
+    VideoPlayerComponent,
+
 
   ],
   exports: [
