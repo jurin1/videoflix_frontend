@@ -1,0 +1,11 @@
+  <div class="modal" [class.show]="showModal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">×</span>
+      <div class="video-container">
+        <video #target class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto">
+          <source [src]="videoUrl" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </div>
+  </div>

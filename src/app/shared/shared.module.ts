@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLinkActive } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { VideoPlayerComponent } from '../video-player/video-player.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { RouterLink } from '@angular/router';
     HttpClientModule,
     RouterLinkActive,
     RouterLink,
+    VideoPlayerComponent
 
   ],
   exports: [
@@ -26,7 +28,7 @@ import { RouterLink } from '@angular/router';
     HttpClientModule,
     RouterLinkActive,
     RouterLink,
-
+    VideoPlayerComponent
   ]
 })
 export class SharedModule { }
