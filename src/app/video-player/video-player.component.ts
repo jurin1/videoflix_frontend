@@ -6,15 +6,7 @@ import videojs from 'video.js';
   selector: 'app-video-player',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="modal" [class.show]="showModal">
-      <div class="modal-content">
-        <span class="close" (click)="closeModal()">×</span>
-        <video #target class="video-js vjs-default-skin" controls preload="auto" width="600" height="400">
-        </video>
-      </div>
-    </div>
-  `,
+  templateUrl: './video-player.component.html',
   styleUrls: ['./video-player.component.scss']
 })
 export class VideoPlayerComponent implements OnDestroy, OnChanges {
@@ -22,27 +14,24 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges {
   @ViewChild('target', { static: false }) target: ElementRef | undefined;
   player: any;
   @Input() showModal: boolean = false;
-  private playerInitialized: boolean = false;
-
-  constructor(private elementRef: ElementRef) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes['videoUrl'] || changes['showModal']) && this.showModal && this.videoUrl) {
-      this.disposePlayer();
+    if (changes['showModal'] && this.showModal) {
       setTimeout(() => {
-        this.initializePlayer();
+        this.setupPlayer();
       }, 100);
+    } else {
+      this.destroyPlayer();
     }
   }
 
-  private initializePlayer() {
-    if (!this.target) {
-      setTimeout(() => this.initializePlayer(), 50);
-      return;
-    }
+  private setupPlayer() {
+    this.destroyPlayer();
 
-    if (this.videoUrl) {
-      this.disposePlayer();
+    setTimeout(() => {
+      if (!this.target || !this.target.nativeElement) {
+        return;
+      }
 
       try {
         this.player = videojs(this.target.nativeElement, {
@@ -50,42 +39,37 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges {
           autoplay: true,
           muted: false,
           preload: 'auto',
-          loop: false,
           fluid: true,
-          aspectRatio: '16:9',
-          width: 640,
-          height: 360
-        });
-
-        this.player.src({
-          src: this.videoUrl,
-          type: 'video/mp4'
+          sources: [{
+            src: this.videoUrl,
+            type: 'video/mp4'
+          }]
         });
 
         this.player.ready(() => {
-          this.player.play();
+          this.player.play().catch(() => {});
         });
 
-        this.playerInitialized = true;
-      } catch (error) { }
-    }
+      } catch (error) {}
+    }, 300);
   }
 
   ngOnDestroy() {
-    this.disposePlayer();
+    this.destroyPlayer();
   }
 
   closeModal() {
     this.showModal = false;
-    this.disposePlayer();
-    this.videoUrl = '';
-    this.playerInitialized = false;
+    this.destroyPlayer();
   }
 
-  private disposePlayer() {
+  private destroyPlayer() {
     if (this.player) {
-      this.player.dispose();
-      this.player = undefined;
+      try {
+        this.player.pause();
+        this.player.dispose();
+        this.player = null;
+      } catch (e) {}
     }
   }
 }

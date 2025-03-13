@@ -139,16 +139,20 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   }
 
   openVideoModal(video: VideoResponse) {
-    let videoUrl = video.resolutions['720p'] || video.resolutions['1080p'] || video.resolutions['360p'] || video.resolutions['120p'] || video.video_file;
-    let fullVideoUrl = `http://localhost:8000${videoUrl}`;
-
     this.showVideoModal = false;
     this.selectedVideoUrl = '';
 
     setTimeout(() => {
-      this.selectedVideoUrl = fullVideoUrl;
+      const resolutions = video.resolutions || {};
+      const videoPath = resolutions['720p'] ||
+        resolutions['1080p'] ||
+        resolutions['360p'] ||
+        resolutions['120p'] ||
+        video.video_file;
+
+      this.selectedVideoUrl = `http://localhost:8000${videoPath}`;
       this.showVideoModal = true;
-    }, 50);
+    }, 100);
   }
 
   loadVideoData() {
