@@ -199,11 +199,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       videoUrl = `http://localhost:8000${videoUrl}`;
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
-        controls: true,
+        controls: false,
         autoplay: true,
         muted: true,
         preload: 'auto',
-        loop: false,
+        loop: true,
       });
 
       this.player.src({
