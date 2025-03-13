@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ApiService } from '../api.service';
 import { Subject, takeUntil } from 'rxjs';
 import videojs from 'video.js';
 import { ToastrService } from 'ngx-toastr';
-import { ChangeDetectorRef } from '@angular/core';
-import { VideoPlayerComponent } from '../video-player/video-player.component'; // Importiere die VideoPlayerComponent
+import { VideoPlayerComponent } from '../video-player/video-player.component';
 
 export interface VideoResponse {
   id: number;
@@ -28,7 +27,7 @@ type VideoResolution = '120p' | '360p' | '720p' | '1080p';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [SharedModule, VideoPlayerComponent], // Füge VideoPlayerComponent zu den Imports hinzu
+  imports: [SharedModule, VideoPlayerComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -58,8 +57,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   selectedVideoUrl: string = '';
   showVideoModal: boolean = false;
 
-
-
   private getVideoResolution(): string {
     const screenWidth = window.screen.width;
 
@@ -83,9 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     this.destroy$.complete();
   }
 
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit wurde aufgerufen!');
-  }
+  ngAfterViewInit(): void { }
 
   ngAfterViewChecked(): void {
     this.checkCarouselNeeds('newOnVideoflix', this.newOnVideoflixCarouselRef);
@@ -144,21 +139,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   }
 
   openVideoModal(video: VideoResponse) {
-    console.log("openVideoModal wurde aufgerufen");
-    console.log("Video:", video);
-
-    // Bevorzugt 720p, falls verfügbar, sonst die höchste Auflösung oder video_file
     let videoUrl = video.resolutions['720p'] || video.resolutions['1080p'] || video.resolutions['360p'] || video.resolutions['120p'] || video.video_file;
     let fullVideoUrl = `http://localhost:8000${videoUrl}`;
 
-    // First close the current modal to reset state
     this.showVideoModal = false;
     this.selectedVideoUrl = '';
 
-    // Allow the modal to close fully before reopening with new video
     setTimeout(() => {
       this.selectedVideoUrl = fullVideoUrl;
-      console.log("Ausgewählte Video URL:", this.selectedVideoUrl);
       this.showVideoModal = true;
     }, 50);
   }
@@ -168,20 +156,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (videos: VideoResponse[]) => {
-          console.log('Video Daten vom Backend erhalten:', videos);
-
           if (videos && videos.length > 0) {
             this.heroVideo = videos[0];
 
-            console.log('heroVideoPlayerRef before init:', this.heroVideoPlayerRef);
-            console.log('heroVideo:', this.heroVideo);
-
             setTimeout(() => {
               this.initializeVideoPlayer(this.heroVideo);
-              console.log('heroVideoPlayerRef after init (setTimeout):', this.heroVideoPlayerRef);
             }, 0);
-
-            console.log('heroVideoPlayerRef after init (outside setTimeout):', this.heroVideoPlayerRef);
 
             this.newOnVideoflixVideos = videos.filter(video => video.genre === 'NewOnVideoflix');
             this.documentaryVideos = videos.filter(video => video.genre === 'Documentary');
@@ -190,12 +170,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
             this.actionVideos = videos.filter(video => video.genre === 'Action');
 
           } else {
-            console.warn('Keine Videos vom Backend erhalten oder Response ist leer.');
             this.toastr.warning('Keine Videos gefunden.', 'Warnung');
           }
         },
         error: (error) => {
-          console.error('Fehler beim Laden der Video Daten:', error);
           this.toastr.error('Fehler beim Laden der Videos. Bitte versuche es später noch einmal.', 'Fehler');
         }
       });
@@ -205,11 +183,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (continueWatchingVideos: VideoResponse[]) => {
-          console.log('"Continue Watching" Videos vom Backend erhalten:', continueWatchingVideos);
           this.continueWatchingVideos = continueWatchingVideos || [];
         },
         error: (error) => {
-          console.error('Fehler beim Laden der "Continue Watching" Videos:', error);
           this.toastr.error('Fehler beim Laden der "Continue Watching" Videos. Bitte versuche es später noch einmal.', 'Fehler');
         }
       });
@@ -221,8 +197,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       let videoUrl = video.resolutions[resolution] || video.video_file;
 
       videoUrl = `http://localhost:8000${videoUrl}`;
-
-      console.log(`Video URL wird gesetzt (Auflösung: ${resolution}):`, videoUrl);
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
         controls: true,
@@ -236,9 +210,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         src: videoUrl,
         type: 'video/mp4'
       });
-    } else {
-      console.warn('heroVideoPlayerRef is still undefined or video.resolutions missing in initializeVideoPlayer');
     }
   }
-
 }

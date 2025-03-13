@@ -18,10 +18,8 @@
     <section class="category-section" *ngIf="newOnVideoflixVideos.length > 0">
         <h3 class="category-title">New on Videoflix</h3>
         <div class="category-carousel">
-            <!-- NEUER CONTAINER UM PFEILE UND LISTE -->
             <button class="carousel-arrow left" *ngIf="carouselNeeded['newOnVideoflix']"
                 (click)="scrollCarousel('newOnVideoflix', -1)">‹</button>
-            <!-- PFEIL LINKS -->
             <div class="video-list" #newOnVideoflixCarousel>
                 <div class="video-card" *ngFor="let video of newOnVideoflixVideos">
                     <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
@@ -31,17 +29,14 @@
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['newOnVideoflix']"
                 (click)="scrollCarousel('newOnVideoflix', 1)">›</button>
-            <!-- PFEIL RECHTS -->
         </div>
     </section>
 
     <section class="category-section" *ngIf="documentaryVideos.length > 0">
         <h3 class="category-title">Documentary</h3>
         <div class="category-carousel">
-            <!-- NEUER CONTAINER UM PFEILE UND LISTE -->
             <button class="carousel-arrow left" *ngIf="carouselNeeded['documentary']"
                 (click)="scrollCarousel('documentary', -1)">‹</button>
-            <!-- PFEIL LINKS -->
             <div class="video-list" #documentaryCarousel>
                 <div class="video-card" *ngFor="let video of documentaryVideos">
                     <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
@@ -51,17 +46,14 @@
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['documentary']"
                 (click)="scrollCarousel('documentary', 1)">›</button>
-            <!-- PFEIL RECHTS -->
         </div>
     </section>
 
     <section class="category-section" *ngIf="dramaVideos.length > 0">
         <h3 class="category-title">Drama</h3>
         <div class="category-carousel">
-            <!-- NEUER CONTAINER UM PFEILE UND LISTE -->
             <button class="carousel-arrow left" *ngIf="carouselNeeded['drama']"
                 (click)="scrollCarousel('drama', -1)">‹</button>
-            <!-- PFEIL LINKS -->
             <div class="video-list" #dramaCarousel>
                 <div class="video-card" *ngFor="let video of dramaVideos">
                     <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
@@ -71,17 +63,14 @@
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['drama']"
                 (click)="scrollCarousel('drama', 1)">›</button>
-            <!-- PFEIL RECHTS -->
         </div>
     </section>
 
     <section class="category-section" *ngIf="comedyVideos.length > 0">
         <h3 class="category-title">Comedy</h3>
         <div class="category-carousel">
-            <!-- NEUER CONTAINER UM PFEILE UND LISTE -->
             <button class="carousel-arrow left" *ngIf="carouselNeeded['comedy']"
                 (click)="scrollCarousel('comedy', -1)">‹</button>
-            <!-- PFEIL LINKS -->
             <div class="video-list" #comedyCarousel>
                 <div class="video-card" *ngFor="let video of comedyVideos">
                     <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
@@ -91,17 +80,14 @@
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['comedy']"
                 (click)="scrollCarousel('comedy', 1)">›</button>
-            <!-- PFEIL RECHTS -->
         </div>
     </section>
 
     <section class="category-section" *ngIf="actionVideos.length > 0">
         <h3 class="category-title">Action</h3>
         <div class="category-carousel">
-            <!-- NEUER CONTAINER UM PFEILE UND LISTE -->
             <button class="carousel-arrow left" *ngIf="carouselNeeded['action']"
                 (click)="scrollCarousel('action', -1)">‹</button>
-            <!-- PFEIL LINKS -->
             <div class="video-list" #actionCarousel>
                 <div class="video-card" *ngFor="let video of actionVideos">
                     <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
@@ -111,17 +97,14 @@
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['action']"
                 (click)="scrollCarousel('action', 1)">›</button>
-            <!-- PFEIL RECHTS -->
         </div>
     </section>
 
     <section class="category-section" *ngIf="continueWatchingVideos.length > 0">
         <h3 class="category-title">Continue Watching</h3>
         <div class="category-carousel">
-            <!-- NEUER CONTAINER UM PFEILE UND LISTE -->
             <button class="carousel-arrow left" *ngIf="carouselNeeded['continueWatching']"
                 (click)="scrollCarousel('continueWatching', -1)">‹</button>
-            <!-- PFEIL LINKS -->
             <div class="video-list" #continueWatchingCarousel>
                 <div class="video-card" *ngFor="let video of continueWatchingVideos">
                     <img [src]="video.thumbnail" alt="{{ video.title }}" class="video-thumbnail">
@@ -131,7 +114,6 @@
             </div>
             <button class="carousel-arrow right" *ngIf="carouselNeeded['continueWatching']"
                 (click)="scrollCarousel('continueWatching', 1)">›</button>
-            <!-- PFEIL RECHTS -->
         </div>
     </section>
 </div>

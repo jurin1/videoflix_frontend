@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit, OnDestroy, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import videojs from 'video.js';
 
@@ -17,52 +17,42 @@ import videojs from 'video.js';
   `,
   styleUrls: ['./video-player.component.scss']
 })
-export class VideoPlayerComponent implements  OnDestroy, OnChanges {
+export class VideoPlayerComponent implements OnDestroy, OnChanges {
   @Input() videoUrl: string = '';
   @ViewChild('target', { static: false }) target: ElementRef | undefined;
   player: any;
   @Input() showModal: boolean = false;
-  private playerInitialized: boolean = false; // Hinzugefügt
+  private playerInitialized: boolean = false;
 
-  constructor(private elementRef: ElementRef) { } // Inject ElementRef
+  constructor(private elementRef: ElementRef) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("ngOnChanges wurde aufgerufen:", changes);
-
-    // Check if either videoUrl or showModal has changed
     if ((changes['videoUrl'] || changes['showModal']) && this.showModal && this.videoUrl) {
-      // Dispose existing player first
       this.disposePlayer();
-
-      // Then initialize the new player with a delay to ensure DOM is ready
       setTimeout(() => {
         this.initializePlayer();
-      }, 100); // Increased timeout to ensure DOM is ready
+      }, 100);
     }
   }
 
   private initializePlayer() {
-    console.log("initializePlayer wurde aufgerufen");
     if (!this.target) {
-      console.warn('Video target element not found!');
       setTimeout(() => this.initializePlayer(), 50);
       return;
     }
 
     if (this.videoUrl) {
-      // Make sure any previous instances are disposed
       this.disposePlayer();
 
       try {
-        // Set explicit dimensions for the player
         this.player = videojs(this.target.nativeElement, {
           controls: true,
           autoplay: true,
           muted: false,
           preload: 'auto',
           loop: false,
-          fluid: true,  // Make the player responsive
-          aspectRatio: '16:9',  // Set aspect ratio
+          fluid: true,
+          aspectRatio: '16:9',
           width: 640,
           height: 360
         });
@@ -72,18 +62,12 @@ export class VideoPlayerComponent implements  OnDestroy, OnChanges {
           type: 'video/mp4'
         });
 
-        // Ensure player is visible and sized correctly
         this.player.ready(() => {
           this.player.play();
-          console.log("Player is ready and playing");
         });
 
         this.playerInitialized = true;
-      } catch (error) {
-        console.error("Error initializing video player:", error);
-      }
-    } else {
-      console.warn('Video URL fehlt.');
+      } catch (error) { }
     }
   }
 
@@ -94,8 +78,8 @@ export class VideoPlayerComponent implements  OnDestroy, OnChanges {
   closeModal() {
     this.showModal = false;
     this.disposePlayer();
-    this.videoUrl = ''; // Video URL zurücksetzen
-    this.playerInitialized = false; // Zurücksetzen
+    this.videoUrl = '';
+    this.playerInitialized = false;
   }
 
   private disposePlayer() {
