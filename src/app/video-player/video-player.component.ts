@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, ElementRef, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import videojs from 'video.js';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Subject, interval, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-video-player',
@@ -13,40 +13,48 @@ import { Subject, interval, takeUntil } from 'rxjs';
   styleUrls: ['./video-player.component.scss']
 })
 export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
-  @Input() videoUrl: string = '';
+  @Input() videoUrl: string = ''; // Wird initial nicht mehr direkt verwendet, aber kann für andere Zwecke behalten werden
   @Input() videoData: any;
   @ViewChild('target', { static: false }) target: ElementRef | undefined;
   player: any;
   @Input() showModal: boolean = false;
   faXmark = faXmark;
 
-  // Speed test variables (erstmal ignoriert)
   private destroy$ = new Subject<void>();
   downloadSpeed: number = 0;
   downloadProgress: number = 0;
   currentResolution: string = '720p';
   isSpeedTestCompleted: boolean = false;
   private resolutions = ['120p', '360p', '720p', '1080p'];
-  playerReady: boolean = false; // Flag, um anzuzeigen, ob der Player bereit ist
+  playerReady: boolean = false;
+  playerInitialized: boolean = false;
 
+  // Basis-URL für die API -  **WICHTIG: Passe diese an deine Django Backend URL an!**
+  private baseUrl = 'http://localhost:8000/api/videos';
 
   ngOnInit() {
-    // Initialize component
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['showModal'] && this.showModal) {
-      setTimeout(() => {
-        this.setupPlayer();
-      }, 100);
-    } else {
+      if (!this.playerInitialized) {
+        setTimeout(() => {
+          this.setupPlayer();
+          this.playerInitialized = true;
+        }, 100);
+      } else {
+        if (changes['videoUrl'] && changes['videoUrl'].currentValue !== changes['videoUrl'].previousValue) {
+          //  `videoUrl` Input wird jetzt primär ignoriert, die URL wird aus `videoData` und `currentResolution` generiert.
+          this.setVideoSource(this.getVideoUrlForResolution(this.currentResolution));
+        }
+      }
+    } else if (changes['showModal'] && !this.showModal) {
       this.destroyPlayer();
+      this.playerInitialized = false;
     }
   }
 
   private setupPlayer() {
-    this.destroyPlayer();
-
     setTimeout(() => {
       if (!this.target || !this.target.nativeElement) {
         return;
@@ -60,14 +68,15 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
           preload: 'auto',
           fluid: true,
           sources: [{
-            src: this.videoUrl,
+            src: this.getVideoUrlForResolution(this.currentResolution), // Verwende die korrekte URL für die initiale Auflösung
             type: 'video/mp4'
           }]
         });
 
+        this.setupEventListeners();
+
         this.player.ready(() => {
-          console.log("setupPlayer: player is ready");
-          this.playerReady = true; // Setze das Flag, wenn der Player bereit ist
+          this.playerReady = true;
           this.restorePlaybackTimeFromSessionStorage();
           this.player.play().catch(() => { });
         });
@@ -76,6 +85,14 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
         console.error("setupPlayer: Error initializing video.js", error);
       }
     }, 300);
+  }
+
+  private setupEventListeners() {
+    if (this.player) {
+      this.player.on('error', (event: any) => {
+        console.error('Video.js Event: error', this.player.error());
+      });
+    }
   }
 
 
@@ -88,6 +105,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
   closeModal() {
     this.showModal = false;
     this.destroyPlayer();
+    this.playerInitialized = false;
   }
 
   private destroyPlayer() {
@@ -96,7 +114,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
         this.player.pause();
         this.player.dispose();
         this.player = null;
-        this.playerReady = false; // Setze das Flag zurück
+        this.playerReady = false;
       } catch (e) {
         console.error("destroyPlayer: Error disposing video.js", e);
       }
@@ -108,31 +126,21 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     return key;
   }
 
-  saveCurrentTime() { // Hinzugefügte Methode zum Speichern der Zeit
+  saveCurrentTime() {
     if (this.player && this.videoData?.id) {
       const currentTime = this.player.currentTime();
       const key = this.getSessionStorageKey();
-      console.log("saveCurrentTime - Key:", key, "currentTime:", currentTime);
       sessionStorage.setItem(key, currentTime.toString());
-      console.log(`Playback time saved to sessionStorage for video ID ${this.videoData.id} at ${currentTime} seconds.`);
-    } else {
-      console.log('Player not initialized or videoData ID missing.');
     }
   }
 
-  private restorePlaybackTimeFromSessionStorage(): void { // **Methode zum Wiederherstellen der Zeit**
-    if (this.player && this.videoData?.id && this.playerReady) { // Stelle sicher, dass der Player bereit ist
+  private restorePlaybackTimeFromSessionStorage(): void {
+    if (this.player && this.videoData?.id && this.playerReady) {
       const key = this.getSessionStorageKey();
-      console.log("restorePlaybackTimeFromSessionStorage - Key:", key);
       const savedTime = sessionStorage.getItem(key);
       if (savedTime) {
         this.player.currentTime(parseFloat(savedTime));
-        console.log(`Playback time restored from sessionStorage for video ID ${this.videoData.id} to ${savedTime} seconds.`);
-      } else {
-        console.log(`No saved playback time found in sessionStorage for video ID ${this.videoData.id}.`);
       }
-    } else {
-      console.log("restorePlaybackTimeFromSessionStorage: Player not ready or videoData missing");
     }
   }
 
@@ -144,31 +152,30 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   changeVideoSource(resolution: string) {
-    const baseUrl = this.videoUrl.substring(0, this.videoUrl.lastIndexOf('/') + 1);
-    const videoUrl = `${baseUrl}${resolution}.mp4`;
-
-    console.log("changeVideoSource: videoUrl =", videoUrl);
-
-    if (this.player) {
-      this.setVideoSource(videoUrl);
-    }
+    this.setVideoSource(this.getVideoUrlForResolution(resolution));
   }
 
+  private getVideoUrlForResolution(resolution: string): string {
+    if (this.videoData && this.videoData.id) {
+      return `${this.baseUrl}/stream/${this.videoData.id}/${resolution}/`; // **Vollständige URL wird generiert**
+    }
+    return ''; // oder eine sinnvolle Fallback-URL oder Fehlerbehandlung
+  }
+
+
   setVideoSource(videoUrl: string) {
-    this.player.src({
-      src: videoUrl,
-      type: 'video/mp4'
-    });
+    if (this.player) {
+      this.player.src({
+        src: videoUrl,
+        type: 'video/mp4'
+      });
 
-    this.player.one('loadedmetadata', () => {
-      console.log("setVideoSource: loadedmetadata event triggered");
-      console.log("setVideoSource: videoData.id inside loadedmetadata =", this.videoData?.id); // Überprüfe die ID HIER
-
-      // Verzögere das Wiederherstellen der Zeit um einen kleinen Moment
-      setTimeout(() => {
-        this.restorePlaybackTimeFromSessionStorage();
-        this.player.play().catch(() => { });
-      }, 100); // Warte 100ms
-    });
+      this.player.one('loadedmetadata', () => {
+        setTimeout(() => {
+          this.restorePlaybackTimeFromSessionStorage();
+          this.player.play().catch(() => { });
+        }, 100);
+      });
+    }
   }
 }
