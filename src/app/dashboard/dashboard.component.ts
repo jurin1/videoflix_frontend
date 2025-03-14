@@ -35,7 +35,7 @@ type VideoResolution = '120p' | '360p' | '720p' | '1080p';
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   faPlay = faPlay;
-
+  selectedVideo: VideoResponse | null = null;
   heroVideo: VideoResponse | any;
   newOnVideoflixVideos: VideoResponse[] = [];
   documentaryVideos: VideoResponse[] = [];
@@ -144,6 +144,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   openVideoModal(video: VideoResponse) {
     this.showVideoModal = false;
     this.selectedVideoUrl = '';
+    this.selectedVideo = video;
 
     setTimeout(() => {
       const resolutions = video.resolutions || {};

@@ -1,14 +1,23 @@
 <div class="modal-overlay" *ngIf="showModal">
     <div class="modal-content">
         <div class="modal-header">
-            <span>Auflösung</span>
-            <span>Fim Titel</span>
+            <span *ngIf="isSpeedTestCompleted">{{ currentResolution }}</span>
+            <span *ngIf="!isSpeedTestCompleted" class="speed-test-progress">
+                {{ downloadProgress }}%
+            </span>
+            <span>{{ videoData?.title || 'Video Player' }}</span>
             <button class="close-button" (click)="closeModal()">
                 <fa-icon [icon]="faXmark"></fa-icon>
             </button>
         </div>
 
         <div class="video-wrapper">
+            <div class="speed-test-overlay" *ngIf="!isSpeedTestCompleted">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" [style.width.%]="downloadProgress"></div>
+                </div>
+                <div class="progress-text">Optimizing video quality: {{ downloadProgress }}%</div>
+            </div>
             <video #target class="video-js vjs-default-skin vjs-big-play-centered" width="640" height="360">
                 Your browser does not support HTML5 video.
             </video>
