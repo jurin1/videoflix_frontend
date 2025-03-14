@@ -27,6 +27,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
   currentResolution: string = '720p';
   isSpeedTestCompleted: boolean = false;
   private resolutions = ['120p', '360p', '720p', '1080p'];
+  playerReady: boolean = false; // Flag, um anzuzeigen, ob der Player bereit ist
 
 
   ngOnInit() {
@@ -65,11 +66,15 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
         });
 
         this.player.ready(() => {
+          console.log("setupPlayer: player is ready");
+          this.playerReady = true; // Setze das Flag, wenn der Player bereit ist
           this.restorePlaybackTimeFromSessionStorage();
           this.player.play().catch(() => { });
         });
 
-      } catch (error) { }
+      } catch (error) {
+        console.error("setupPlayer: Error initializing video.js", error);
+      }
     }, 300);
   }
 
@@ -91,18 +96,23 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
         this.player.pause();
         this.player.dispose();
         this.player = null;
-      } catch (e) { }
+        this.playerReady = false; // Setze das Flag zurück
+      } catch (e) {
+        console.error("destroyPlayer: Error disposing video.js", e);
+      }
     }
   }
 
   private getSessionStorageKey(): string {
-    return `videoflix_playback_time_${this.videoData?.id}`;
+    const key = `videoflix_playback_time_${this.videoData?.id}`;
+    return key;
   }
 
   saveCurrentTime() { // Hinzugefügte Methode zum Speichern der Zeit
     if (this.player && this.videoData?.id) {
       const currentTime = this.player.currentTime();
       const key = this.getSessionStorageKey();
+      console.log("saveCurrentTime - Key:", key, "currentTime:", currentTime);
       sessionStorage.setItem(key, currentTime.toString());
       console.log(`Playback time saved to sessionStorage for video ID ${this.videoData.id} at ${currentTime} seconds.`);
     } else {
@@ -111,15 +121,54 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
   }
 
   private restorePlaybackTimeFromSessionStorage(): void { // **Methode zum Wiederherstellen der Zeit**
-    if (this.player && this.videoData?.id) {
-      const savedTime = sessionStorage.getItem(this.getSessionStorageKey());
+    if (this.player && this.videoData?.id && this.playerReady) { // Stelle sicher, dass der Player bereit ist
+      const key = this.getSessionStorageKey();
+      console.log("restorePlaybackTimeFromSessionStorage - Key:", key);
+      const savedTime = sessionStorage.getItem(key);
       if (savedTime) {
         this.player.currentTime(parseFloat(savedTime));
         console.log(`Playback time restored from sessionStorage for video ID ${this.videoData.id} to ${savedTime} seconds.`);
-        sessionStorage.removeItem(this.getSessionStorageKey()); // Optional: Einmaliges Wiederherstellen
       } else {
         console.log(`No saved playback time found in sessionStorage for video ID ${this.videoData.id}.`);
       }
+    } else {
+      console.log("restorePlaybackTimeFromSessionStorage: Player not ready or videoData missing");
     }
+  }
+
+  onResolutionChange(event: any) {
+    const selectedResolution = event.target.value;
+    this.saveCurrentTime();
+    this.currentResolution = selectedResolution;
+    this.changeVideoSource(selectedResolution);
+  }
+
+  changeVideoSource(resolution: string) {
+    const baseUrl = this.videoUrl.substring(0, this.videoUrl.lastIndexOf('/') + 1);
+    const videoUrl = `${baseUrl}${resolution}.mp4`;
+
+    console.log("changeVideoSource: videoUrl =", videoUrl);
+
+    if (this.player) {
+      this.setVideoSource(videoUrl);
+    }
+  }
+
+  setVideoSource(videoUrl: string) {
+    this.player.src({
+      src: videoUrl,
+      type: 'video/mp4'
+    });
+
+    this.player.one('loadedmetadata', () => {
+      console.log("setVideoSource: loadedmetadata event triggered");
+      console.log("setVideoSource: videoData.id inside loadedmetadata =", this.videoData?.id); // Überprüfe die ID HIER
+
+      // Verzögere das Wiederherstellen der Zeit um einen kleinen Moment
+      setTimeout(() => {
+        this.restorePlaybackTimeFromSessionStorage();
+        this.player.play().catch(() => { });
+      }, 100); // Warte 100ms
+    });
   }
 }

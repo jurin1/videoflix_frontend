@@ -2,7 +2,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <span>{{ videoData?.title || 'Video Player' }}</span>
-            <button (click)="saveCurrentTime()">Save Time</button> <!-- Hinzugefügter Button -->
+            <!-- Auflösungs-Dropdown -->
+            <select (change)="onResolutionChange($event)">
+                <option value="120p">120p</option>
+                <option value="360p">360p</option>
+                <option value="720p" selected>720p</option>
+                <option value="1080p">1080p</option>
+            </select>
             <button class="close-button" (click)="closeModal()">
                 <fa-icon [icon]="faXmark"></fa-icon>
             </button>
