@@ -4,6 +4,8 @@
             <video #heroVideoPlayer class="video-js vjs-default-skin" controls preload="auto" data-setup="{}">
             </video>
         </div>
+    </div>
+</section>
         <div class="video-details">
             <h2 class="hero-video-title">{{ heroVideo.title }}</h2>
             <p class="hero-video-description">
@@ -13,8 +15,6 @@
                 <fa-icon [icon]="faPlay"></fa-icon> Play
             </button>
         </div>
-    </div>
-</section>
 
 <div class="dashboard-container">
     <section class="category-section" *ngIf="newOnVideoflixVideos.length > 0">
