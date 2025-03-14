@@ -1,6 +1,13 @@
 <div class="modal-overlay" *ngIf="showModal">
     <div class="modal-content">
-        <button class="close-button" (click)="closeModal()">×</button>
+        <div class="modal-header">
+            <span>Auflösung</span>
+            <span>Fim Titel</span>
+            <button class="close-button" (click)="closeModal()">
+                <fa-icon [icon]="faXmark"></fa-icon>
+            </button>
+        </div>
+
         <div class="video-wrapper">
             <video #target class="video-js vjs-default-skin vjs-big-play-centered" width="640" height="360">
                 Your browser does not support HTML5 video.

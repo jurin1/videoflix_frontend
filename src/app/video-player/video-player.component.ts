@@ -1,11 +1,14 @@
 import { Component, Input, OnDestroy, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import videojs from 'video.js';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 
 @Component({
   selector: 'app-video-player',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './video-player.component.html',
   styleUrls: ['./video-player.component.scss']
 })
@@ -14,6 +17,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges {
   @ViewChild('target', { static: false }) target: ElementRef | undefined;
   player: any;
   @Input() showModal: boolean = false;
+  faXmark = faXmark
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['showModal'] && this.showModal) {
@@ -37,7 +41,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges {
         this.player = videojs(this.target.nativeElement, {
           controls: true,
           autoplay: true,
-          muted: false,
+          muted: true,
           preload: 'auto',
           fluid: true,
           sources: [{
