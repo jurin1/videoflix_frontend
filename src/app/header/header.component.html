@@ -4,6 +4,6 @@
     </div>
     <nav>
         <button *ngIf="!isAuthenticated" routerLink="/login">Log in</button>
-        <button *ngIf="isAuthenticated" (click)="logout()">Log out</button>
+        <button *ngIf="isAuthenticated" (click)="logout()"> <img src="./assets/images/logout.svg" alt="logout">Log out</button>
     </nav>
 </header>

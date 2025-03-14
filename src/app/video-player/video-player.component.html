@@ -1,13 +1,14 @@
 <div class="modal-overlay" *ngIf="showModal">
     <div class="modal-content">
         <div class="modal-header">
-            <select (change)="onResolutionChange($event)">
-                <option value="120p">120p</option>
-                <option value="360p">360p</option>
-                <option value="720p" selected>720p</option>
-                <option value="1080p">1080p</option>
+            <span *ngIf="isSpeedTestRunning">Geschwindigkeitstest läuft: {{ speedTestProgress }}%</span>
+            <select *ngIf="showResolutionDropdown" (change)="onResolutionChange($event)">
+                <option value="120p" [selected]="currentResolution === '120p'">120p</option>
+                <option value="360p" [selected]="currentResolution === '360p'">360p</option>
+                <option value="720p" [selected]="currentResolution === '720p'">720p</option>
+                <option value="1080p" [selected]="currentResolution === '1080p'">1080p</option>
             </select>
-            <span>{{ videoData?.title || 'Video Player' }}</span>
+            <span *ngIf="showResolutionDropdown">{{ videoData?.title || 'Video Player' }}</span>
             <button class="close-button" (click)="closeModal()">
                 <fa-icon [icon]="faXmark"></fa-icon>
             </button>

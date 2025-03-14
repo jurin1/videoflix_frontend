@@ -21,12 +21,20 @@ img{
 
 nav {
   button {
-    background-color: blue; 
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    gap: 15px;
+    align-items: center;
+    background-color: var(--primary-color); 
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+  }
+  img{
+    height: 20px;
   }
 }
 
@@ -34,5 +42,21 @@ nav {
   .logo {
     content: url("/assets/images/logo_small.png");
     height: 45px;
+  }
+}
+
+@media (max-width: 500px) {
+  .logo {
+    height: 25px;
+  }
+
+  button{
+    font-size: 12px;
+    padding: 3px 3px !important;
+    gap: 5px;
+
+    img{
+      height: 12px;
+    }
   }
 }

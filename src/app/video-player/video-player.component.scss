@@ -27,11 +27,44 @@
   background-color: #000;
   color: #fff;
 
-  span {
-    &.speed-test-progress {
-      color: #e50914;
-      font-weight: 500;
-    }
+  select {
+    appearance: none; /* Entfernt Standard-Browser-Styling */
+    -webkit-appearance: none; /* Für Safari */
+    -moz-appearance: none; /* Für Firefox */
+    background-color: #333; /* Dunklerer Hintergrund */
+    color: #fff; /* Helle Textfarbe */
+    border: none; /* Entfernt Standard-Rahmen */
+    border-radius: 4px; /* Abgerundete Ecken */
+    padding: 8px 16px; /* Innenabstand */
+    font-size: 1rem; /* Schriftgröße anpassen */
+    cursor: pointer; /* Cursor-Stil für Interaktion */
+    outline: none; /* Entfernt Fokus-Outline (optional, aber oft erwünscht) */
+    margin-right: 16px; /* Abstand zum Titel */
+  }
+
+  /* Pfeil-Icon anpassen (optional, für mehr Kontrolle) */
+  select::-ms-expand {
+    display: none; /* Für Internet Explorer */
+  }
+
+  /* Für moderne Browser (Chrome, Firefox, Safari etc.) */
+  select::after {
+    content: '\25BC'; /* Unicode für Pfeil nach unten */
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    pointer-events: none; /* Verhindert, dass der Pfeil klickbar ist */
+  }
+
+  /* Hover-Effekt (optional) */
+  select:hover {
+    background-color: #444;
+  }
+
+  /* Fokus-Effekt (optional, für Tastaturnavigation) */
+  select:focus {
+    box-shadow: 0 0 0 2px var(--primary-color); /* Beispiel-Akzentfarbe für Fokus */
   }
 }
 
