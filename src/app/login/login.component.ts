@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
+import { OnInit } from '@angular/core'; 
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit { 
   loginForm: FormGroup;
   backendError: string | null = null;
 
@@ -28,6 +29,12 @@ export class LoginComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
+  }
+
+  ngOnInit(): void { // Implement ngOnInit
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   submitLogin() {

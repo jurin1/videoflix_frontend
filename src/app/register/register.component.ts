@@ -4,6 +4,8 @@ import { SharedModule } from '../shared/shared.module';
 import { Subject, takeUntil, debounceTime, filter } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service'; 
 
 function emailDomainValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -45,17 +47,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router, // Inject Router
+    private authService: AuthService // Inject AuthService
   ) {
     this.registerForm = new FormGroup({
       username: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, emailDomainValidator()]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      confirmPassword: new FormControl('', [Validators.required]) // **Confirm Password Feld BEIBEHALTEN**
-    }, passwordMatchValidator as ValidatorFn); // **Password Match Validator BEIBEHALTEN**
+      confirmPassword: new FormControl('', [Validators.required])
+    }, passwordMatchValidator as ValidatorFn);
   }
 
   ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+    }
     this.setupRealTimeValidation();
   }
 
@@ -63,7 +70,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
   private setupRealTimeValidation() {
     ['username', 'email', 'password', 'confirmPassword'].forEach(controlName => { // **"confirmPassword" wieder hinzufügen**
       const control = this.registerForm.get(controlName);

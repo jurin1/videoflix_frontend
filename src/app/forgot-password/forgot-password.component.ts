@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { ApiService } from '../api.service'; 
-import { ToastrService } from 'ngx-toastr'; 
+import { ApiService } from '../api.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router'; 
+import { AuthService } from '../auth/auth.service'; 
 
 @Component({
   selector: 'app-forgot-password',
@@ -11,17 +13,25 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnInit {
 
   forgotPasswordForm: FormGroup;
 
   constructor(
-    private apiService: ApiService, 
-    private toastr: ToastrService 
+    private apiService: ApiService,
+    private toastr: ToastrService,
+    private router: Router, 
+    private authService: AuthService 
   ) {
     this.forgotPasswordForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email])
     });
+  }
+
+  ngOnInit(): void { 
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   submitForgotPassword() {

@@ -8,17 +8,17 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { ImprintComponent } from './imprint/imprint.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-
+import { AuthGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'imprint', component: ImprintComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password/:userId/:token', component: ResetPasswordComponent }, // Route mit Parametern userId und token
+  { path: 'reset-password/:userId/:token', component: ResetPasswordComponent },
 ];
 
 @NgModule({

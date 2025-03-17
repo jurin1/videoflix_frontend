@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { ActivatedRoute, Router } from '@angular/router'; // Router importieren
-import { ApiService } from '../api.service'; // ApiService importieren
-import { ToastrService } from 'ngx-toastr'; // ToastrService importieren
+import { ActivatedRoute, Router } from '@angular/router'; 
+import { ApiService } from '../api.service'; 
+import { ToastrService } from 'ngx-toastr'; 
 
 
 function passwordMatchValidator(control: AbstractControl): { [key: string]: any } | null {
