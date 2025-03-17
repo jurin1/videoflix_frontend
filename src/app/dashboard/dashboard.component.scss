@@ -1,3 +1,6 @@
+.body-dashboard{
+  position: relative;
+}
 .dashboard-container {
   color: white;
   max-width: 1920px;
@@ -180,7 +183,7 @@
 
 @media (min-width: 1921px) {
   .hero-video-title {
-    font-size: 3.2em;
+    font-size: 4.2em;
   }
 
   .hero-video-description {
