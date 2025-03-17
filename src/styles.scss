@@ -52,6 +52,10 @@ $success-color: #28a745;
   --light-text-color: #{$light-text-color};
   --error-color: #{$error-color};
   --success-color: #{$success-color};
+  --breakpoint-small: 576px;
+  --breakpoint-medium: 768px;
+  --breakpoint-large: 992px;
+  --breakpoint-extra-large: 1200px;
 }
 
 .bg-primary { background-color: var(--primary-color); } /* CSS Variablen Klassen bleiben */
@@ -128,28 +132,6 @@ button:hover {
   filter: brightness(90%);
 }
 
-
-
-
-
-:root {
-  --breakpoint-small: 576px;
-  --breakpoint-medium: 768px;
-  --breakpoint-large: 992px;
-  --breakpoint-extra-large: 1200px;
-}
-
-
-@media (max-width: var(--breakpoint-medium)) {
-
-  .login-container,
-  .register-container,
-  .forgot-password-container,
-  .reset-password-container {
-    max-width: 70%; 
-  }
-}
-
 .toast-container{
   position: fixed;
   bottom: 25px;
@@ -215,4 +197,21 @@ button:hover {
 .toast {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
+}
+
+@media (min-width: 1920px) {
+  body {
+    margin: 0 auto; /* Zentriere den Body */
+    max-width: 1920px; /* Setze die maximale Breite auf 1920px */
+  }
+}
+
+@media (max-width: var(--breakpoint-medium)) {
+
+  .login-container,
+  .register-container,
+  .forgot-password-container,
+  .reset-password-container {
+    max-width: 70%; 
+  }
 }
