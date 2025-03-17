@@ -1,7 +1,7 @@
 <div class="modal-overlay" *ngIf="showModal">
     <div class="modal-content">
         <div class="modal-header">
-            <span *ngIf="isSpeedTestRunning">Geschwindigkeitstest läuft: {{ speedTestProgress }}%</span>
+            <span *ngIf="isSpeedTestRunning">Internet Speed test: {{ speedTestProgress }}%</span>
             <select *ngIf="showResolutionDropdown" (change)="onResolutionChange($event)">
                 <option value="120p" [selected]="currentResolution === '120p'">120p</option>
                 <option value="360p" [selected]="currentResolution === '360p'">360p</option>

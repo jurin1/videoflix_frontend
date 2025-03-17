@@ -6,8 +6,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
-import { OnInit } from '@angular/core'; 
+import { OnInit } from '@angular/core';
 
+/**
+ * Component for user login functionality.
+ * Handles login form, submission, and authentication token storage.
+ *
+ * @Component
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -15,10 +21,22 @@ import { OnInit } from '@angular/core';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit { 
+export class LoginComponent implements OnInit {
+  /**
+   * FormGroup for the login form, including email and password controls.
+   */
   loginForm: FormGroup;
+  /**
+   * Error message from the backend, if any login error occurs.
+   */
   backendError: string | null = null;
 
+  /**
+   * @param {ApiService} apiService Service for making API calls, specifically for user login.
+   * @param {Router} router Service for navigating to different routes after successful login.
+   * @param {ToastrService} toastr Service for displaying toast notifications for login status.
+   * @param {AuthService} authService Service for managing authentication state, like setting user as authenticated.
+   */
   constructor(
     private apiService: ApiService,
     private router: Router,
@@ -31,12 +49,21 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { // Implement ngOnInit
+  /**
+   * Lifecycle hook called after component initialization.
+   * Checks if the user is already authenticated and navigates to the dashboard if so.
+   */
+  ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
   }
 
+  /**
+   * Handles the submission of the login form.
+   * Sends login data to the API, stores the authentication token on successful login,
+   * navigates to the dashboard, and displays toast messages for success or error.
+   */
   submitLogin() {
     if (this.loginForm.valid) {
 
@@ -47,19 +74,15 @@ export class LoginComponent implements OnInit {
 
       this.apiService.loginUser(loginData).subscribe({
         next: (response) => {
-          console.log('Login erfolgreich:', response);
           localStorage.setItem('authToken', response.token);
           this.authService.loginSuccessful();
           this.router.navigate(['/dashboard']);
-          this.toastr.success('Login erfolgreich!', 'Erfolg'); 
+          this.toastr.success('Login successful!', 'Success');
         },
         error: (errorMessage) => {
-          console.error('Login fehlgeschlagen:', errorMessage);
-          this.toastr.error(errorMessage, 'Login Fehler'); 
+          this.toastr.error(errorMessage, 'Login Error');
         }
       });
-    } else {
-      console.log('Formular ist ungültig');
     }
   }
 }

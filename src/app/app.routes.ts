@@ -10,6 +10,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { AuthGuard } from './auth/auth.guard';
 
+/**
+ * Defines the routes for the application.
+ * Each route maps a URL path to a component.
+ */
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
@@ -21,6 +25,11 @@ export const routes: Routes = [
   { path: 'reset-password/:userId/:token', component: ResetPasswordComponent },
 ];
 
+/**
+ * NgModule that configures the application's routing.
+ * Imports RouterModule and defines the application routes.
+ * Exports RouterModule to make routing directives available in the AppModule.
+ */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

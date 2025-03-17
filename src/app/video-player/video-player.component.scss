@@ -1,3 +1,8 @@
+/**
+ * Styles for the modal overlay that covers the entire viewport.
+ * It is fixed position, full screen, with a semi-transparent black background.
+ * It ensures the modal is on top of other content using z-index and centers its content.
+ */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -11,6 +16,11 @@
   align-items: center;
 }
 
+/**
+ * Styles for the modal content container.
+ * It sets a dark background, a maximum width, and rounded corners.
+ * Overflow hidden is used to clip content that goes beyond the border-radius.
+ */
 .modal-content {
   background-color: #141414;
   width: 80%;
@@ -19,6 +29,10 @@
   overflow: hidden;
 }
 
+/**
+ * Styles for the modal header section.
+ * It uses flexbox to arrange title and close button, sets background and text color.
+ */
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -27,47 +41,63 @@
   background-color: #000;
   color: #fff;
 
+  /**
+   * Styles for the select dropdown within the modal header.
+   * It removes default browser styling, sets custom background, text color, border, and padding.
+   */
   select {
-    appearance: none; /* Entfernt Standard-Browser-Styling */
-    -webkit-appearance: none; /* Für Safari */
-    -moz-appearance: none; /* Für Firefox */
-    background-color: #333; /* Dunklerer Hintergrund */
-    color: #fff; /* Helle Textfarbe */
-    border: none; /* Entfernt Standard-Rahmen */
-    border-radius: 4px; /* Abgerundete Ecken */
-    padding: 8px 16px; /* Innenabstand */
-    font-size: 1rem; /* Schriftgröße anpassen */
-    cursor: pointer; /* Cursor-Stil für Interaktion */
-    outline: none; /* Entfernt Fokus-Outline (optional, aber oft erwünscht) */
-    margin-right: 16px; /* Abstand zum Titel */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    margin-right: 16px;
   }
 
-  /* Pfeil-Icon anpassen (optional, für mehr Kontrolle) */
+  /**
+   * Removes default expand icon in Internet Explorer for the select dropdown.
+   */
   select::-ms-expand {
-    display: none; /* Für Internet Explorer */
+    display: none;
   }
 
-  /* Für moderne Browser (Chrome, Firefox, Safari etc.) */
+  /**
+   * Adds a custom arrow icon using CSS pseudo-element for the select dropdown.
+   */
   select::after {
-    content: '\25BC'; /* Unicode für Pfeil nach unten */
+    content: '\25BC';
     position: absolute;
     top: 50%;
     right: 12px;
     transform: translateY(-50%);
-    pointer-events: none; /* Verhindert, dass der Pfeil klickbar ist */
+    pointer-events: none;
   }
 
-  /* Hover-Effekt (optional) */
+  /**
+   * Hover effect for the select dropdown, changes background color.
+   */
   select:hover {
     background-color: #444;
   }
 
-  /* Fokus-Effekt (optional, für Tastaturnavigation) */
+  /**
+   * Focus effect for the select dropdown, adds a box-shadow for accessibility.
+   */
   select:focus {
-    box-shadow: 0 0 0 2px var(--primary-color); /* Beispiel-Akzentfarbe für Fokus */
+    box-shadow: 0 0 0 2px var(--primary-color);
   }
 }
 
+/**
+ * Styles for the close button in the modal header.
+ * Removes default button styling and sets text color, cursor, and font size.
+ */
 .close-button {
   background: none;
   border: none;
@@ -76,6 +106,10 @@
   font-size: 20px;
 }
 
+/**
+ * Styles for the video wrapper to maintain 16:9 aspect ratio for video player.
+ * Uses padding-bottom trick to keep aspect ratio responsive.
+ */
 .video-wrapper {
   position: relative;
   width: 100%;
@@ -84,6 +118,10 @@
   background-color: #000;
 }
 
+/**
+ * Styles for the speed test overlay during video loading.
+ * Covers the video area with a semi-transparent black background and centers content.
+ */
 .speed-test-overlay {
   position: absolute;
   top: 0;
@@ -99,6 +137,10 @@
   color: white;
 }
 
+/**
+ * Styles for the container of the progress bar in speed test overlay.
+ * Sets width, height, background color, border-radius, and overflow hidden.
+ */
 .progress-bar-container {
   width: 70%;
   height: 8px;
@@ -108,17 +150,29 @@
   margin-bottom: 16px;
 }
 
+/**
+ * Styles for the progress bar itself.
+ * Sets height, background color, and transition for smooth width changes.
+ */
 .progress-bar {
   height: 100%;
   background-color: #e50914;
   transition: width 0.3s ease-in-out;
 }
 
+/**
+ * Styles for the progress text in speed test overlay.
+ * Sets font size and font weight.
+ */
 .progress-text {
   font-size: 16px;
   font-weight: 500;
 }
 
+/**
+ * Styles for the video-js player to fill the video wrapper.
+ * Ensures the video player takes up the full space of its parent container.
+ */
 .video-js {
   position: absolute;
   top: 0;

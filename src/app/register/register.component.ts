@@ -5,8 +5,12 @@ import { Subject, takeUntil, debounceTime, filter } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service'; 
+import { AuthService } from '../auth/auth.service';
 
+/**
+ * Validator function to check if the email domain is valid.
+ * @returns A validation function that returns null if the email is valid, otherwise an error object.
+ */
 function emailDomainValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -15,7 +19,11 @@ function emailDomainValidator(): ValidatorFn {
   };
 }
 
-
+/**
+ * Validator function to check if the password and confirmPassword fields match.
+ * @param control - The abstract control (FormGroup) to validate.
+ * @returns A validation function that returns null if passwords match, otherwise an error object.
+ */
 function passwordMatchValidator(control: AbstractControl): { [key: string]: any } | null {
   const formGroup = control as FormGroup;
   if (!formGroup) {
@@ -32,7 +40,9 @@ function passwordMatchValidator(control: AbstractControl): { [key: string]: any 
   }
 }
 
-
+/**
+ * Component for user registration.
+ */
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -45,11 +55,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   private destroy$ = new Subject<void>();
 
+  /**
+   * Constructor for the RegisterComponent.
+   * @param apiService - Service for making API calls.
+   * @param toastr - Service for displaying toast notifications.
+   * @param router - Service for navigation.
+   * @param authService - Service for authentication.
+   */
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
-    private router: Router, // Inject Router
-    private authService: AuthService // Inject AuthService
+    private router: Router,
+    private authService: AuthService
   ) {
     this.registerForm = new FormGroup({
       username: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -59,6 +76,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }, passwordMatchValidator as ValidatorFn);
   }
 
+  /**
+   * Lifecycle hook called after component initialization.
+   * Checks if the user is already authenticated and navigates to the dashboard if so.
+   * Sets up real-time validation for form controls.
+   */
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
@@ -66,12 +88,21 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.setupRealTimeValidation();
   }
 
+  /**
+   * Lifecycle hook called before the component is destroyed.
+   * Emits a complete signal to the destroy$ Subject to unsubscribe from observables.
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  /**
+   * Sets up real-time validation for specific form controls.
+   * Validation is triggered after a debounce time of 5000ms and only if the control value length is at least 3.
+   */
   private setupRealTimeValidation() {
-    ['username', 'email', 'password', 'confirmPassword'].forEach(controlName => { // **"confirmPassword" wieder hinzufügen**
+    ['username', 'email', 'password', 'confirmPassword'].forEach(controlName => {
       const control = this.registerForm.get(controlName);
       if (control) {
         control.valueChanges.pipe(
@@ -85,29 +116,26 @@ export class RegisterComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Submits the registration form.
+   * If the form is valid, it calls the apiService to register the user and handles success or error responses.
+   */
   submitRegister() {
     if (this.registerForm.valid) {
-      console.log('Register Form Value:', this.registerForm.value);
-      // API-Aufruf zur Registrierung - Daten angepasst
       const registerData = {
         username: this.registerForm.value.username,
         email: this.registerForm.value.email,
         password: this.registerForm.value.password,
-        // confirm_password: this.registerForm.value.confirmPassword,  **Confirm Password NICHT mit senden**
       };
 
       this.apiService.registerUser(registerData).subscribe({
         next: (response) => {
-          console.log('Registrierung erfolgreich:', response);
-          this.toastr.success('Registrierung erfolgreich! Bitte überprüfe deine E-Mails, um dein Konto zu aktivieren.', 'Erfolg');
+          this.toastr.success('Registration successful! Please check your emails to activate your account.', 'Success');
         },
         error: (error) => {
-          console.error('Registrierung fehlgeschlagen:', error);
-          this.toastr.error(error.error.error, 'Registrierung Fehler');
+          this.toastr.error(error.error.error, 'Registration Error');
         }
       });
-    } else {
-      console.log('Formular ist ungültig');
     }
   }
 }

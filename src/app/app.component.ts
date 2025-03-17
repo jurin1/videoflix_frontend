@@ -4,6 +4,10 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
+/**
+ * Root component of the application.
+ * It manages the overall layout and dynamically adjusts the footer based on the current route.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -15,6 +19,11 @@ export class AppComponent {
   title = 'videoflix_frontend';
   isFixedFooter = false;
 
+  /**
+   * Constructor for AppComponent.
+   * Subscribes to router events to determine if the footer should be fixed based on the current route.
+   * @param router - The Router service for navigation and route event handling.
+   */
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

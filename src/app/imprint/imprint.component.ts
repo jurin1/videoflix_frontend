@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { FooterComponent } from '../footer/footer.component';
+
 
 @Component({
   selector: 'app-imprint',
   standalone: true,
-  imports: [FooterComponent],
+  imports: [],
   templateUrl: './imprint.component.html',
   styleUrl: './imprint.component.scss'
 })

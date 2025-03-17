@@ -5,6 +5,11 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Subject } from 'rxjs';
 
+/**
+ * VideoPlayerComponent is a component that handles video playback using Video.js library.
+ * It supports features like resolution switching, playback time restoration from session storage,
+ * and a speed test to determine the optimal initial resolution.
+ */
 @Component({
   selector: 'app-video-player',
   standalone: true,
@@ -13,40 +18,65 @@ import { Subject } from 'rxjs';
   styleUrls: ['./video-player.component.scss']
 })
 export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
+  /**
+   * @input videoUrl - The URL of the video to be played. It's an input property.
+   */
   @Input() videoUrl: string = '';
+  /**
+   * @input videoData - Data related to the video, such as its ID. It's an input property.
+   */
   @Input() videoData: any;
+  /**
+   * @viewChild target - Reference to the video player element in the template.
+   */
   @ViewChild('target', { static: false }) target: ElementRef | undefined;
+  /**
+   * player - Instance of the Video.js player.
+   */
   player: any;
+  /**
+   * @input showModal - Boolean to control the visibility of the video player modal. It's an input property.
+   */
   @Input() showModal: boolean = false;
+  /**
+   * faXmark - Icon for the close button.
+   */
   faXmark = faXmark;
 
   private destroy$ = new Subject<void>();
   downloadSpeed: number = 0;
   downloadProgress: number = 0;
-  currentResolution: string = '720p'; // Default-Auflösung
+  currentResolution: string = '720p';
   isSpeedTestCompleted: boolean = false;
   private resolutions = ['120p', '360p', '720p', '1080p'];
   playerReady: boolean = false;
   playerInitialized: boolean = false;
 
-  speedTestProgress: number = 0; // Fortschrittsanzeige für den Speedtest
-  isSpeedTestRunning: boolean = false; // Status, ob der Speedtest läuft
-  showResolutionDropdown: boolean = false; // Steuert die Anzeige des Dropdowns
-  suggestedResolution: string = '720p'; // Vorgeschlagene Auflösung nach Speedtest (Standardwert)
+  speedTestProgress: number = 0;
+  isSpeedTestRunning: boolean = false;
+  showResolutionDropdown: boolean = false;
+  suggestedResolution: string = '720p';
 
-
-  // Basis-URL für die API
   private baseUrl = 'http://localhost:8000/api/videos';
 
+  /**
+   * Lifecycle hook called after component initialization.
+   */
   ngOnInit() {
   }
 
+  /**
+   * Lifecycle hook called when input properties change.
+   * Handles changes to `showModal` and `videoUrl` inputs to manage player initialization,
+   * video source updates, and player destruction based on modal visibility.
+   * @param changes - SimpleChanges object containing the changed properties.
+   */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['showModal'] && this.showModal) {
       if (!this.playerInitialized) {
         setTimeout(() => {
-          this.performSpeedTest().then(() => { // Starte Speedtest und warte auf Abschluss
-            this.setupPlayer(); // Initialisiere Player NACH dem Speedtest
+          this.performSpeedTest().then(() => {
+            this.setupPlayer();
             this.playerInitialized = true;
           });
         }, 100);
@@ -61,20 +91,31 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
-  // ... (restliche Methoden wie setupPlayer, setupEventListeners, ngOnDestroy, closeModal, destroyPlayer, getSessionStorageKey, saveCurrentTime, restorePlaybackTimeFromSessionStorage, onResolutionChange, changeVideoSource, getVideoUrlForResolution, setVideoSource) ...
 
+  /**
+   * Lifecycle hook called before the component is destroyed.
+   * Ensures the player is properly disposed of and resources are released.
+   */
   ngOnDestroy() {
     this.destroyPlayer();
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  /**
+   * Closes the video player modal and destroys the player instance.
+   */
   closeModal() {
     this.showModal = false;
     this.destroyPlayer();
     this.playerInitialized = false;
   }
 
+  /**
+   * Destroys the Video.js player instance, pausing playback and disposing of resources.
+   * Catches and logs any errors during disposal.
+   * @private
+   */
   private destroyPlayer() {
     if (this.player) {
       try {
@@ -88,11 +129,19 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
+  /**
+   * Generates a unique session storage key based on the video ID.
+   * @private
+   * @returns The session storage key string.
+   */
   private getSessionStorageKey(): string {
     const key = `videoflix_playback_time_${this.videoData?.id}`;
     return key;
   }
 
+  /**
+   * Saves the current playback time to session storage for resuming later.
+   */
   saveCurrentTime() {
     if (this.player && this.videoData?.id) {
       const currentTime = this.player.currentTime();
@@ -101,6 +150,10 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
+  /**
+   * Restores the playback time from session storage if a saved time exists for the current video.
+   * @private
+   */
   private restorePlaybackTimeFromSessionStorage(): void {
     if (this.player && this.videoData?.id && this.playerReady) {
       const key = this.getSessionStorageKey();
@@ -111,17 +164,32 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
+  /**
+   * Handles the resolution change event from the resolution dropdown.
+   * Saves the current time before switching resolution and updates the video source.
+   * @param event - The change event from the select element.
+   */
   onResolutionChange(event: any) {
     const selectedResolution = event.target.value;
-    this.saveCurrentTime(); // Speichere Zeit VOR dem Auflösungswechsel
+    this.saveCurrentTime();
     this.currentResolution = selectedResolution;
     this.changeVideoSource(selectedResolution);
   }
 
+  /**
+   * Changes the video source to the specified resolution.
+   * @param resolution - The desired resolution ('120p', '360p', '720p', '1080p').
+   */
   changeVideoSource(resolution: string) {
     this.setVideoSource(this.getVideoUrlForResolution(resolution));
   }
 
+  /**
+   * Constructs the video URL for a given resolution based on the video ID and base URL.
+   * @private
+   * @param resolution - The desired resolution.
+   * @returns The video URL for the specified resolution, or an empty string if video data is missing.
+   */
   private getVideoUrlForResolution(resolution: string): string {
     if (this.videoData && this.videoData.id) {
       return `${this.baseUrl}/stream/${this.videoData.id}/${resolution}/`;
@@ -129,10 +197,13 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     return '';
   }
 
-
+  /**
+   * Sets the video source for the player and handles restoring playback time after source change.
+   * @param videoUrl - The URL of the video source.
+   */
   setVideoSource(videoUrl: string) {
     if (this.player) {
-      const currentTimeBeforeSwitch = this.player.currentTime(); // Aktuelle Zeit VOR dem Wechsel speichern
+      const currentTimeBeforeSwitch = this.player.currentTime();
 
       this.player.src({
         src: videoUrl,
@@ -141,7 +212,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
 
       this.player.one('loadedmetadata', () => {
         setTimeout(() => {
-          this.player.currentTime(currentTimeBeforeSwitch); // Zeit NACH dem Wechsel wiederherstellen
+          this.player.currentTime(currentTimeBeforeSwitch);
           this.restorePlaybackTimeFromSessionStorage();
           this.player.play().catch(() => { });
         }, 100);
@@ -149,7 +220,11 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
-
+  /**
+   * Initializes the Video.js player with default settings and sets up event listeners.
+   * It uses the suggested resolution determined by the speed test as the initial source.
+   * @private
+   */
   private setupPlayer() {
     setTimeout(() => {
       if (!this.target || !this.target.nativeElement) {
@@ -164,7 +239,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
           preload: 'auto',
           fluid: true,
           sources: [{
-            src: this.getVideoUrlForResolution(this.suggestedResolution), // Starte mit der vorgeschlagenen Auflösung
+            src: this.getVideoUrlForResolution(this.suggestedResolution),
             type: 'video/mp4'
           }]
         });
@@ -183,6 +258,10 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }, 300);
   }
 
+  /**
+   * Sets up event listeners for the Video.js player to handle events like errors.
+   * @private
+   */
   private setupEventListeners() {
     if (this.player) {
       this.player.on('error', (event: any) => {
@@ -191,30 +270,35 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     }
   }
 
-
+  /**
+   * Performs a speed test by downloading an image to estimate the download speed.
+   * Determines the suggested video resolution based on the speed test results.
+   * @async
+   * @private
+   * @returns A Promise that resolves when the speed test is complete.
+   */
   async performSpeedTest(): Promise<void> {
     return new Promise<void>(resolve => {
       this.isSpeedTestRunning = true;
       this.speedTestProgress = 0;
       this.showResolutionDropdown = false;
 
-      const imageSrc = 'https://unsplash.com/photos/-JMK4lyhnGM/download?ixid=M3wxMjA3fDB8MXxhbGx8Mnx8fHx8fHx8MTc0MTk2NjMzOXw&force=true&w=640' + Math.random(); // Verwende lokales Bild
+      const imageSrc = 'https://unsplash.com/photos/-JMK4lyhnGM/download?ixid=M3wxMjA3fDB8MXxhbGx8Mnx8fHx8fHx8MTc0MTk2NjMzOXw&force=true&w=640' + Math.random();
       const startTime = performance.now();
       let endTime: number;
       let image = new Image();
       let progressInterval: any;
       let loadedBytes = 0;
-      const totalBytes = 40325; // Deine Bildgröße beibehalten
+      const totalBytes = 40325;
 
       image.onload = () => {
         endTime = performance.now();
         const duration = (endTime - startTime) / 1000;
         const bitsLoaded = totalBytes * 8;
         this.downloadSpeed = parseFloat((bitsLoaded / duration / 1024 / 1024).toFixed(2));
-        console.log(`Download Speed: ${this.downloadSpeed} Mbps`);
 
         this.suggestedResolution = this.determineResolution(this.downloadSpeed);
-        this.currentResolution = this.suggestedResolution; // **Setze currentResolution auf suggestedResolution**
+        this.currentResolution = this.suggestedResolution;
         this.isSpeedTestCompleted = true;
         this.isSpeedTestRunning = false;
         this.showResolutionDropdown = true;
@@ -251,6 +335,11 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
     });
   }
 
+  /**
+   * Determines the optimal video resolution based on the download speed in Mbps.
+   * @param speedMbps - The download speed in Mbps.
+   * @returns The suggested resolution ('120p', '360p', '720p', '1080p').
+   */
   determineResolution(speedMbps: number): string {
     if (speedMbps >= 10) {
       return '1080p';
@@ -262,5 +351,4 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
       return '120p';
     }
   }
-
 }

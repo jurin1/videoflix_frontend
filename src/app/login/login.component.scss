@@ -1,8 +1,8 @@
 .login-page {
-  background-image: url('/assets/images/login_background.jpg'); /* Hintergrundbild (wie Startseite) */
+  background-image: url('/assets/images/login_background.jpg');
   background-size: cover;
   background-position: center;
-  background-color: rgba(0, 0, 0, 0.5); /* Schwarzer Overlay (wie Startseite) */
+  background-color: rgba(0, 0, 0, 0.5); 
   color: white;
   min-height: 100vh;
   display: flex;
