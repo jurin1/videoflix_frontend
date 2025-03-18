@@ -4,6 +4,8 @@ import videojs from 'video.js';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Subject } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 /**
  * VideoPlayerComponent is a component that handles video playback using Video.js library.
@@ -57,7 +59,9 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
   showResolutionDropdown: boolean = false;
   suggestedResolution: string = '720p';
 
-  private baseUrl = 'http://localhost:8000/api/videos';
+  private baseUrl = environment.apiUrl + '/videos';;
+  constructor(private toastr: ToastrService,){}
+
 
   /**
    * Lifecycle hook called after component initialization.
@@ -283,13 +287,13 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
       this.speedTestProgress = 0;
       this.showResolutionDropdown = false;
 
-      const imageSrc = 'https://unsplash.com/photos/-JMK4lyhnGM/download?ixid=M3wxMjA3fDB8MXxhbGx8Mnx8fHx8fHx8MTc0MTk2NjMzOXw&force=true&w=640' + Math.random();
+      const imageSrc = 'https://drive.google.com/file/d/1m4xX28NduuWZk2C5tUAACaqj7xnKk3Y1/view?usp=sharing';
       const startTime = performance.now();
       let endTime: number;
       let image = new Image();
       let progressInterval: any;
       let loadedBytes = 0;
-      const totalBytes = 40325;
+      const totalBytes = 2934863;
 
       image.onload = () => {
         endTime = performance.now();
@@ -298,6 +302,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
         this.downloadSpeed = parseFloat((bitsLoaded / duration / 1024 / 1024).toFixed(2));
 
         this.suggestedResolution = this.determineResolution(this.downloadSpeed);
+        this.toastr.success(`Download speed: ${this.downloadSpeed} Mbps`, 'Speed Test');
         this.currentResolution = this.suggestedResolution;
         this.isSpeedTestCompleted = true;
         this.isSpeedTestRunning = false;
@@ -321,11 +326,9 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
           clearInterval(progressInterval);
           return;
         }
-        const currentTime = performance.now();
-        const timeElapsed = (currentTime - startTime) / 1000;
-        const expectedBytesLoaded = Math.min(totalBytes, Math.round(this.downloadSpeed * 125 * timeElapsed * 1024));
-        this.speedTestProgress = Math.round((expectedBytesLoaded / totalBytes) * 100);
-        this.speedTestProgress = Math.min(this.speedTestProgress, 100);
+
+        this.speedTestProgress += 1; 
+        this.speedTestProgress = Math.min(this.speedTestProgress, 100); 
 
         if (this.speedTestProgress >= 100) {
           clearInterval(progressInterval);

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { environment } from '../environments/environment';
 
 /**
  * Interface for the video response object.
@@ -29,7 +30,7 @@ export interface VideoResponse {
   providedIn: 'root'
 })
 export class ApiService {
-  private backendUrl = 'http://localhost:8000/api';
+  private backendUrl = environment.apiUrl;
 
   /**
    * Constructor for ApiService.
