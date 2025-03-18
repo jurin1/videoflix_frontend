@@ -287,7 +287,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
       this.speedTestProgress = 0;
       this.showResolutionDropdown = false;
 
-      const imageSrc = 'https://drive.google.com/file/d/1m4xX28NduuWZk2C5tUAACaqj7xnKk3Y1/view?usp=sharing';
+      const imageSrc = 'assets/speedtest/10MB-TESTFILE.ORG.jpg';
       const startTime = performance.now();
       let endTime: number;
       let image = new Image();
