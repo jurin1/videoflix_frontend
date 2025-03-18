@@ -1,37 +1,36 @@
-@import 'app/styles/user.styles';
-@import 'video.js/dist/video-js.css';
-
-
-@font-face {
-  font-family: 'DM Sans'; 
-  font-style: normal;
-  font-weight: 400; 
-  font-display: swap; 
-  src: local('DM Sans Regular'), local('DMSans-Regular'),
-       url('/assets/fonts/DMSans-Regular.ttf') format('truetype'); 
-}
+@import "app/styles/user.styles";
+@import "video.js/dist/video-js.css";
 
 @font-face {
-  font-family: 'DM Sans';
+  font-family: "DM Sans";
   font-style: normal;
-  font-weight: 700; 
+  font-weight: 400;
   font-display: swap;
-  src: local('DM Sans Bold'), local('DMSans-Bold'),
-       url('/assets/fonts/DMSans-Bold.ttf') format('truetype');
+  src: local("DM Sans Regular"), local("DMSans-Regular"),
+    url("/assets/fonts/DMSans-Regular.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("DM Sans Bold"), local("DMSans-Bold"),
+    url("/assets/fonts/DMSans-Bold.ttf") format("truetype");
+}
 
-html, body {
+html,
+body {
   margin: 0;
   // height: 100%;
-  font-family: 'DM Sans', sans-serif; 
-  color: var(--text-color); 
+  font-family: "DM Sans", sans-serif;
+  color: var(--text-color);
   background-color: var(--background-color);
   overflow-x: hidden;
 }
 
 /* Farbpalette (SCSS Variablen) */
-$primary-color: #2E3EDF;;
+$primary-color: #2e3edf;
 $secondary-color: #6c757d;
 $accent-color: #ffc107;
 $background-color: #000;
@@ -40,7 +39,6 @@ $text-color: #333;
 $light-text-color: #f8f9fa;
 $error-color: #dc3545;
 $success-color: #28a745;
-
 
 /* Hintergrundfarben Klassen (CSS Variablen bleiben, aber nutzen SCSS Variablen) */
 :root {
@@ -59,30 +57,67 @@ $success-color: #28a745;
   --breakpoint-extra-large: 1200px;
 }
 
-.bg-primary { background-color: var(--primary-color); } /* CSS Variablen Klassen bleiben */
-.bg-secondary { background-color: var(--secondary-color); }
-.bg-accent { background-color: var(--accent-color); }
-.bg-background { background-color: var(--background-color); }
-.bg-dark { background-color: var(--dark-background-color); }
+.bg-primary {
+  background-color: var(--primary-color);
+} /* CSS Variablen Klassen bleiben */
+.bg-secondary {
+  background-color: var(--secondary-color);
+}
+.bg-accent {
+  background-color: var(--accent-color);
+}
+.bg-background {
+  background-color: var(--background-color);
+}
+.bg-dark {
+  background-color: var(--dark-background-color);
+}
 
 /* Textfarben Klassen (CSS Variablen bleiben, aber nutzen SCSS Variablen) */
-.text-primary { color: var(--primary-color); }
-.text-secondary { color: var(--secondary-color); }
-.text-accent { color: var(--accent-color); }
-.text-text { color: var(--text-color); }
-.text-light { color: var(--light-text-color); }
-.text-error { color: var(--error-color); }
-.text-success { color: var(--success-color); }
+.text-primary {
+  color: var(--primary-color);
+}
+.text-secondary {
+  color: var(--secondary-color);
+}
+.text-accent {
+  color: var(--accent-color);
+}
+.text-text {
+  color: var(--text-color);
+}
+.text-light {
+  color: var(--light-text-color);
+}
+.text-error {
+  color: var(--error-color);
+}
+.text-success {
+  color: var(--success-color);
+}
 
 /* Textfarben */
-.text-primary { color: var(--primary-color); }
-.text-secondary { color: var(--secondary-color); }
-.text-accent { color: var(--accent-color); }
-.text-text { color: var(--text-color); }
-.text-light { color: var(--light-text-color); }
-.text-error { color: var(--error-color); }
-.text-success { color: var(--success-color); }
-
+.text-primary {
+  color: var(--primary-color);
+}
+.text-secondary {
+  color: var(--secondary-color);
+}
+.text-accent {
+  color: var(--accent-color);
+}
+.text-text {
+  color: var(--text-color);
+}
+.text-light {
+  color: var(--light-text-color);
+}
+.text-error {
+  color: var(--error-color);
+}
+.text-success {
+  color: var(--success-color);
+}
 
 /* Schriftgrößen für Überschriften */
 h1 {
@@ -116,9 +151,17 @@ h6 {
 }
 
 /* Standard Textkörpergröße */
-p, span, div, li, a, button, input, textarea, select {
-  font-size: 1rem; 
-  line-height: 1.6; 
+p,
+span,
+div,
+li,
+a,
+button,
+input,
+textarea,
+select {
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 a:hover {
@@ -133,11 +176,11 @@ button:hover {
   filter: brightness(90%);
 }
 
-.toast-container{
+.toast-container {
   position: fixed;
   bottom: 25px;
   margin-left: 5px;
-  z-index: 9999;  
+  z-index: 9999;
 }
 
 .toast-success {
@@ -145,18 +188,17 @@ button:hover {
   color: black;
   border-radius: 8px;
   padding: 8px 8px;
-  .toast-title{
+  .toast-title {
     color: green;
   }
 }
-
 
 .toast-error {
   background-color: #f8f9fa;
   color: black;
   border-radius: 8px;
   padding: 8px 8px;
-  .toast-title{
+  .toast-title {
     color: var(--error-color);
   }
 }
@@ -166,7 +208,7 @@ button:hover {
   color: black;
   border-radius: 8px;
   padding: 8px 8px;
-  .toast-title{
+  .toast-title {
     color: orange;
   }
 }
@@ -176,29 +218,28 @@ button:hover {
   color: black;
   border-radius: 8px;
   padding: 8px 8px;
-  .toast-title{
+  .toast-title {
     color: #17a2b8;
   }
 }
 
 .toast-title {
-  font-weight: bold; 
-
-
+  font-weight: bold;
 }
-
-
 
 .toast-close-button {
-  color: white !important; 
+  color: white !important;
   opacity: 0.8 !important;
 }
-
 
 .toast {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
+
+
+
+
 
 @media (min-width: 1920px) {
   body {
@@ -208,11 +249,10 @@ button:hover {
 }
 
 @media (max-width: var(--breakpoint-medium)) {
-
   .login-container,
   .register-container,
   .forgot-password-container,
   .reset-password-container {
-    max-width: 70%; 
+    max-width: 70%;
   }
 }

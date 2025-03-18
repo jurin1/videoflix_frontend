@@ -59,7 +59,7 @@ h2 {
     color: var(--primary-color);
 
           &::placeholder { 
-      color: var(--primary-color);
+      color: rgba(0, 0, 0, 0.5);
       opacity: 1; 
     }
 
