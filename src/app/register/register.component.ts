@@ -4,7 +4,7 @@ import { SharedModule } from '../shared/shared.module';
 import { Subject, takeUntil, debounceTime, filter } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
 /**
@@ -66,7 +66,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private toastr: ToastrService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {
     this.registerForm = new FormGroup({
       username: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -86,6 +87,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.router.navigate(['/dashboard']);
     }
     this.setupRealTimeValidation();
+
+    this.route.queryParams.subscribe(params => {
+      const emailFromQuery = params['email'];
+      if (emailFromQuery) {
+        this.registerForm.patchValue({ email: emailFromQuery });
+      }
+    });
   }
 
   /**

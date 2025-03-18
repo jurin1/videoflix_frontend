@@ -103,4 +103,13 @@ export class ApiService {
   getContinueWatchingVideos(): Observable<any> {
     return this.http.get(`${this.backendUrl}/videos/viewing/continue-watching/`, { headers: this.getAuthHeaders() });
   }
+
+  /**
+ * Sendet eine Anfrage für eine Kontoaktion (z.B. Passwort zurücksetzen, Konto aktivieren) basierend auf der E-Mail-Adresse.
+ * @param email - Die E-Mail-Adresse des Benutzers.
+ * @returns Ein Observable, das die Antwort vom Backend enthält.
+ */
+  accountActionRequest(email: string): Observable<any> {
+    return this.http.post(`${this.backendUrl}/users/account-action-request/`, { email });
+  }
 }
