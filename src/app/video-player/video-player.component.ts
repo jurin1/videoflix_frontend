@@ -239,7 +239,7 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
         this.player = videojs(this.target.nativeElement, {
           controls: true,
           autoplay: true,
-          muted: true,
+          muted: false,
           preload: 'auto',
           fluid: true,
           sources: [{
@@ -286,55 +286,43 @@ export class VideoPlayerComponent implements OnDestroy, OnChanges, OnInit {
       this.isSpeedTestRunning = true;
       this.speedTestProgress = 0;
       this.showResolutionDropdown = false;
-
       const imageSrc = 'assets/speedtest/10MB-TESTFILE.ORG.jpg';
       const startTime = performance.now();
       let endTime: number;
-      let image = new Image();
-      let progressInterval: any;
-      let loadedBytes = 0;
       const totalBytes = 2934863;
 
-      image.onload = () => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', imageSrc, true);
+      xhr.responseType = 'blob';
+
+      xhr.onprogress = (event) => {
+        if (event.lengthComputable) {
+          this.speedTestProgress = Math.round((event.loaded / event.total) * 100);
+        }
+      };
+
+      xhr.onload = () => {
         endTime = performance.now();
         const duration = (endTime - startTime) / 1000;
         const bitsLoaded = totalBytes * 8;
         this.downloadSpeed = parseFloat((bitsLoaded / duration / 1024 / 1024).toFixed(2));
-
         this.suggestedResolution = this.determineResolution(this.downloadSpeed);
         this.toastr.success(`Download speed: ${this.downloadSpeed} Mbps`, 'Speed Test');
         this.currentResolution = this.suggestedResolution;
         this.isSpeedTestCompleted = true;
         this.isSpeedTestRunning = false;
         this.showResolutionDropdown = true;
-        clearInterval(progressInterval);
         resolve();
       };
 
-      image.onerror = () => {
+      xhr.onerror = () => {
         console.error('Speed test image failed to load');
         this.isSpeedTestRunning = false;
         this.showResolutionDropdown = true;
-        clearInterval(progressInterval);
         resolve();
       };
 
-      image.src = imageSrc;
-
-      progressInterval = setInterval(() => {
-        if (endTime) {
-          clearInterval(progressInterval);
-          return;
-        }
-
-        this.speedTestProgress += 1; 
-        this.speedTestProgress = Math.min(this.speedTestProgress, 100); 
-
-        if (this.speedTestProgress >= 100) {
-          clearInterval(progressInterval);
-          this.speedTestProgress = 100;
-        }
-      }, 100);
+      xhr.send();
     });
   }
 

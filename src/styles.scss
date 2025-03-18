@@ -27,6 +27,7 @@ html, body {
   font-family: 'DM Sans', sans-serif; 
   color: var(--text-color); 
   background-color: var(--background-color);
+  overflow-x: hidden;
 }
 
 /* Farbpalette (SCSS Variablen) */
