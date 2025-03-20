@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { VideoPlayerComponent } from '../video-player/video-player.component';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { environment } from '../../environments/environment'; 
+import { environment } from '../../environments/environment';
 
 /**
  * Interface defining the structure of a video response from the API.
@@ -289,6 +289,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         next: (videos: VideoResponse[]) => {
           if (videos && videos.length > 0) {
             this.heroVideo = videos[0];
+            this.heroVideo.thumbnail = `${environment.apiUrl}/videos/thumbnail/${this.heroVideo.id}/`;
 
             setTimeout(() => {
               this.initializeVideoPlayer(this.heroVideo);
@@ -296,16 +297,41 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
 
             this.newOnVideoflixVideos = videos.filter(video => video.genre === 'NewOnVideoflix');
             this.documentaryVideos = videos.filter(video => video.genre === 'Documentary');
-            this.dramaVideos = videos.filter(video => video.genre === 'Drama');
-            this.comedyVideos = videos.filter(video => video.genre === 'Comedy');
-            this.actionVideos = videos.filter(video => video.genre === 'Action');
 
+            this.documentaryVideos = this.documentaryVideos.map(video => {
+              video.thumbnail = `${environment.apiUrl}/videos/thumbnail/${video.id}/`;
+              return video;
+            });
+
+            this.dramaVideos = videos.filter(video => video.genre === 'Drama');
+            this.dramaVideos = this.dramaVideos.map(video => {
+              video.thumbnail = `${environment.apiUrl}/videos/thumbnail/${video.id}/`;
+              return video;
+            });
+
+            this.comedyVideos = videos.filter(video => video.genre === 'Comedy');
+            this.comedyVideos = this.comedyVideos.map(video => {
+              video.thumbnail = `${environment.apiUrl}/videos/thumbnail/${video.id}/`;
+              return video;
+            });
+
+            this.actionVideos = videos.filter(video => video.genre === 'Action');
+            this.actionVideos = this.actionVideos.map(video => {
+              video.thumbnail = `${environment.apiUrl}/videos/thumbnail/${video.id}/`;
+              return video;
+            });
+
+            this.newOnVideoflixVideos = this.newOnVideoflixVideos.map(video => {
+              video.thumbnail = `${environment.apiUrl}/videos/thumbnail/${video.id}/`;
+              return video;
+            });
           } else {
             this.toastr.warning('No videos found.', 'Warning');
           }
         },
         error: (error) => {
           this.toastr.error('Error loading videos. Please try again later.', 'Error');
+
         }
       });
 
@@ -315,6 +341,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       .subscribe({
         next: (continueWatchingVideos: VideoResponse[]) => {
           this.continueWatchingVideos = continueWatchingVideos || [];
+          this.continueWatchingVideos = this.continueWatchingVideos.map(video => {
+            video.thumbnail = `${environment.apiUrl}/videos/thumbnail/${video.id}/`;
+            return video;
+          });
         },
         error: (error) => {
           this.toastr.error('Error loading "Continue Watching" videos. Please try again later.', 'Error');
@@ -332,10 +362,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   private initializeVideoPlayer(video: VideoResponse) {
     if (this.heroVideoPlayerRef && video.resolutions) {
       const resolution = this.getVideoResolution() as VideoResolution;
-      let videoUrl = video.resolutions[resolution] || video.video_file;
+      let videoUrl ='/videos/stream/'+ video.id + '/' + resolution + '/';
+      console.log(videoUrl);
       // let videoUrl = "/videos/stream/19/720p/"
 
-      videoUrl = `${environment.apiUrl}${videoUrl}`; 
+      videoUrl = `${environment.apiUrl}${videoUrl}`;
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
         controls: false,
