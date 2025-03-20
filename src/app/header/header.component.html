@@ -1,6 +1,7 @@
 <header>
     <div class="logo">
-        <a routerLink="/"><img src="./assets/images/Logo.png" alt=""></a>
+        <a routerLink="/"><img src="./assets/images/Logo.png" alt="logo" class="desktop-logo"></a>
+        <a routerLink="/"><img src="/assets/images/logo_small.png" alt="logo" class="mobile-logo"></a>
     </div>
     <nav>
         <button *ngIf="!isAuthenticated" routerLink="/login">Log in</button>

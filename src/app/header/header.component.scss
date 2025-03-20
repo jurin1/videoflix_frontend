@@ -19,6 +19,10 @@ img{
 }
 }
 
+.mobile-logo{
+  display: none;
+}
+
 nav {
   button {
     display: flex;
@@ -40,8 +44,15 @@ nav {
 
 @media (max-width: 768px) {
   .logo {
-    content: url("/assets/images/logo_small.png");
     height: 45px;
+  }
+
+  .desktop-logo{
+    display: none;
+  }
+
+  .mobile-logo{
+    display: block;
   }
 }
 
