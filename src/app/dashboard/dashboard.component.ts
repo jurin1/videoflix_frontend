@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { VideoPlayerComponent } from '../video-player/video-player.component';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { environment } from '../../environments/environment'; 
 
 /**
  * Interface defining the structure of a video response from the API.
@@ -272,7 +273,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         resolutions['120p'] ||
         video.video_file;
 
-      this.selectedVideoUrl = `http://localhost:8000${videoPath}`;
+      this.selectedVideoUrl = `${environment.apiUrl}${videoPath}`; // URL hinzugefügt wie im API-Service
       this.showVideoModal = true;
     }, 100);
   }
@@ -332,8 +333,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     if (this.heroVideoPlayerRef && video.resolutions) {
       const resolution = this.getVideoResolution() as VideoResolution;
       let videoUrl = video.resolutions[resolution] || video.video_file;
+      // let videoUrl = "/videos/stream/19/720p/"
 
-      videoUrl = `http://localhost:8000${videoUrl}`;
+      videoUrl = `${environment.apiUrl}${videoUrl}`; 
 
       this.player = videojs(this.heroVideoPlayerRef.nativeElement, {
         controls: false,
