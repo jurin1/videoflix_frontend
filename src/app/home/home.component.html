@@ -2,12 +2,10 @@
     <div class="hero-content">
         <h1>Movies, TV shows, and more</h1>
         <p>Enter your email to create or restart your subscription.</p>
-        <div class="email-signup">
-            <!-- Formular für die E-Mail-Anfrage -->
-            <form [formGroup]="emailForm" (ngSubmit)="submitEmailRequest()">
-                <input type="email" placeholder="Email Address" formControlName="email">
-                <button type="submit" [disabled]="!emailForm.valid">Sign Up</button>
-            </form>
-        </div>
+        <form [formGroup]="emailForm" (ngSubmit)="submitEmailRequest()">
+            <input type="email" placeholder="Email Address" formControlName="email">
+            <button type="submit" [disabled]="!emailForm.valid">Sign Up</button>
+        </form>
+
     </div>
 </div>
