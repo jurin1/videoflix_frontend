@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://dj.neizcon.de/api'
+    apiUrl: 'https://esample.com/api'
 };
