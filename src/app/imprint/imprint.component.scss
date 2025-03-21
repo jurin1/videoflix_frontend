@@ -1,19 +1,16 @@
-
-
-
-.imprint{
-    margin-left: 60px;
-    margin-top: 180px;
-    color: aliceblue;
-      display: flex;
+.imprint {
+  margin-left: 60px;
+  margin-top: 180px;
+  color: aliceblue;
+  display: flex;
   flex-direction: column;
   min-height: 100vh;
 
-    a{
-        color: rgb(64, 110, 150);
-    }  
- }
+  a {
+    color: rgb(64, 110, 150);
+  }
+}
 
-app-footer{
-position: relative;
- }
+app-footer {
+  position: relative;
+}
